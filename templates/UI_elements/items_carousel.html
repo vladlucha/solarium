@@ -1,0 +1,76 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'salarium/css/hover-effect-4.css' %}">
+
+<div class="swiper-container-1">
+    <div class="swiper-wrapper">
+        {% for item in items %}
+            <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12 text-center swiper-slide" align="center">
+
+                <div class="hovereffect-4 thumbnail-item center material-shadow">
+                    <img class="img-responsive"  width="300" height="300" style="overflow: hidden" src="{{ item.thumbnail.url }}" alt="">
+                        <div class="overlay">
+                            <h2>Hover effect 8</h2>
+                            <p class="set1 text-center">
+                                <a href="#">
+                                    <i>
+                                        {% for item_size in item.items_count.all %}
+                                            {% if item_size.count > 0 %}
+                                                {{ item_size.size.name }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </i>
+                                </a>
+                                <a href="#">
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                            </p>
+                            <hr>
+                            <hr>
+                            <p class="set2">
+                                <a href="#">
+                                    <i class="fa fa-instagram"></i>
+                                </a>
+                                <a href="#">
+                                    <i class="fa fa-dribbble"></i>
+                                </a>
+                            </p>
+                        </div>
+                </div>
+
+{#                <div class="hovereffect thumbnail-item center material-shadow" >#}
+{#                    <img class="img-responsive" width="300" height="300" style="overflow: hidden" src="{{ item.thumbnail.url }}" alt="">#}
+{#                    <div class="overlay">#}
+{#                        <h2>{{ item.name }}</h2>#}
+{#                        <p class="icon-links">#}
+{#                            <a href="#">#}
+{#                                <span class="fa fa-twitter"></span>#}
+{#                            </a>#}
+{#                            <a href="#">#}
+{#                                <span class="fa fa-facebook"></span>#}
+{#                            </a>#}
+{#                            <a href="#">#}
+{#                                <span class="fa fa-instagram"></span>#}
+{#                            </a>#}
+{#                        </p>#}
+{#                    </div>#}
+{#                </div>#}
+            </div>
+        {% endfor %}
+
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination-1" style="text-align: center"></div>
+</div>
+
+<!-- Initialize Swiper -->
+<script>
+var swiper = new Swiper('.swiper-container-1', {
+    pagination: '.swiper-pagination-1',
+    slidesPerView: $(window).width() > 1200 ? 4 : 3,
+    paginationClickable: true,
+    spaceBetween: 30,
+    loop: true,
+    autoplay: 2500,
+    autoplayDisableOnInteraction: true
+});
+</script>

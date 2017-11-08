@@ -1,0 +1,61 @@
+<style>
+    #googlemaps{
+        z-index: 0;
+        height: 100%;
+        width: 100%;
+    }
+    div.map-container {
+        position:absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+         /* Set z-index to 0 as it will be on a layer below the contact form */
+    }
+</style>
+
+<div class="col-xs-6">
+    <div class="row">
+        <div class="col-xs-6"><i class="fa fa-vk"></i> <a href="http://vk.com/salarium" target="_blank">vk.com/salarium</a></div>
+        <div class="col-xs-6 text-right"><i class="fa fa-mobile"></i> +375 29 9114158</div>
+        <div class="col-xs-6"><i class="fa fa-instagram"></i> <a href="http://instagram.com/salarium" target="_blank">instagram.com/salarium</a></div>
+        <div class="col-xs-6 text-right">+375 25 9413665</div>
+        <div class="col-xs-6"><i class="fa fa-twitter"></i> <a href="http://twitter.com/salariumby" target="_blank">twitter.com/salariumby</a></div>
+        <div class="col-xs-6 text-right"><i class="fa fa-home"></i> Минск, ул. Гурского 37</div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            Информация которую я введу позже
+        </div>
+    </div>
+
+</div>
+<div class="col-xs-6 map-container">
+    <div id="googlemaps"></div>
+</div>
+
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+<script type="text/javascript">
+    // The latitude and longitude of your business / place
+    var position = [27.1959739, 78.02423269999997];
+    function showGoogleMaps() {
+        var latLng = new google.maps.LatLng(position[0], position[1]);
+        var mapOptions = {
+            zoom: 13, // initialize zoom level - the max value is 21
+            streetViewControl: false, // hide the yellow Street View pegman
+            scaleControl: true, // allow users to zoom the Google Map
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: latLng,
+        };
+        map = new google.maps.Map(document.getElementById('googlemaps'),
+            mapOptions);
+        // Show the default red marker at the location
+        marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            draggable: false
+        });
+    }
+    google.maps.event.addDomListener(window, 'load', showGoogleMaps);
+</script>

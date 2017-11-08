@@ -1,0 +1,42 @@
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        {% for slide in slider.slides.all %}
+            <div class="swiper-slide"  style="background-image:url({{ slide.image_src }});">
+                {% for slide_text in slide.texts.all %}
+                    {{ slide_text.html |safe }}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-next btn-nxt"></div>
+    <div class="swiper-button-prev btn-prev"></div>
+</div>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        nextButton: '.btn-nxt',
+        prevButton: '.btn-prev',
+        slidesPerView: 1,
+        paginationClickable: true,
+        spaceBetween: 0,
+        loop: true,
+        onInit: function(){
+
+                $(window).ready(function(){
+                    $('.section').first().height($('.section').first().height() - $('.additional-menu').height());
+
+                    $('.swiper-slide.swiper-slide-active').find('.slider-text').each(function(){
+                        $(this).animateCss($(this).attr('animation'));
+                    });
+                });
+            }
+        });
+
+        swiper.on('slideChangeStart', function () {
+            $('.swiper-slide.swiper-slide-active').find('.slider-text').each(function(){
+                $(this).animateCss($(this).attr('animation'));
+            });
+        });
+</script>

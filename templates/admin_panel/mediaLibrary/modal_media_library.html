@@ -1,0 +1,19 @@
+
+<div class="modal fade mediaLibraryModal" id="mediaLibrary" role="dialog" style="z-index: 214748364;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Media Library</h4>
+            </div>
+            <div class="modal-body">
+                <a class="btn btn-success btn-md select-items-button" id="select-button">Выбрать</a>
+                <a class="btn btn-primary btm-md" id="upload-media">Загрузить картинку</a>
+                <button type="button" class="btn btn-danger btm-md" data-dismiss="modal">Закрыть</button>
+                <hr>
+                {% include 'admin_panel/mediaLibrary/media_files.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+

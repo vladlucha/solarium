@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="table-responsive">
+            <table class="table  table-condensed">
+                <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th>IP</th>
+                        <th>Страница</th>
+                        <th class="text-center">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user_activity in online_users %}
+                        <tr>
+                            <td>
+                                <b>{{ user_activity.user.username }}</b>
+                                {% if user_activity.user.name or user_activity.user.name %}
+                                    ({{ user_activity.user.name }} {{ user_activity.user.surname }} {{ user_activity.user.patronymic }})
+                                {% endif %}
+                            </td>
+                            <td>{{ user_activity.last_activity_ip }}</td>
+                            <td>/</td>
+                            <td class="text-center">
+                                <a class="btn btn-default" href="{% url 'chat_with_user' user_pk=user_activity.user.pk %}">Написать</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

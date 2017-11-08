@@ -1,0 +1,30 @@
+{% load staticfiles %}
+
+
+<div class='blog blogtit'>
+    <div class="container">
+        <h5>Новое из блога</h5>
+    </div>
+    <div class="containerBlog" style="min-height: calc({{ posts|length }} * 390px)">
+        {% for post in posts %}
+
+            <div class="blog{{ forloop.counter|post_counter }} blog-item">
+                <a href="{% url 'get_post' post_slug=post.slug %}">
+                    <div class="image-wrapper" style="background-image: url({{ post.thumbnail.url }})">
+                        <img src="{{ post.thumbnail.url }}">
+                    </div>
+                    <h5>{{ post.title }}</h5>
+                    <p>{{ post.excerpt }}</p>
+                </a>
+
+            </div>
+
+        {% endfor %}
+    <br>
+    </div>
+</div>
+<div class="row"></div>
+{% if number_blog_pages > 2 %}
+    <div class="down"><a href=""><img src="{% static 'salarium/img/arrow.png' %}"></a></div>
+{% endif %}
+<br>

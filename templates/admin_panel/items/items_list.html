@@ -1,0 +1,37 @@
+{% load staticfiles %}
+<script src="{% static 'salarium/js/items.js' %}"></script>
+<div class="row">
+    <div class="col-xs-6 text-left">
+        <h3>Список товаров</h3>
+    </div>
+    <div class="col-xs-6 text-right" style="padding-top: 20px">
+        <a class="btn btn-md btn-primary" onClick="createItem('{% url 'create_item' item_id=None %}', '{{ csrf_token }}')">Добавить товар</a>
+{#        <a class="btn btn-md btn-primary" href="{% url 'create_item' %}">Add item</a>#}
+    </div>
+</div>
+<br>
+{% if items %}
+    {% if request.session.view_type == 'list' %}
+        <div class="row">
+            <div class="col-md-2  text-center">
+                <b>Миниатюра</b>
+            </div>
+            <div class="col-md-6">
+                <b>Название и описание</b>
+            </div>
+            <div class="col-md-4  text-center">
+                <b>Цена</b>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        {% for item in items %}
+            {% include 'admin_panel/items/item.html' %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% include 'admin_panel/no_data_message.html' with data=items message='ТОваров еще нет' %}
+{% include 'admin_panel/pagination.html' with objects=items route='items' page=item_page num_pages=number_item_pages input_name='item_page' %}
+<br><br><br><br>

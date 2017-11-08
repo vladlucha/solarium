@@ -1,0 +1,10 @@
+<div class="row">
+    <div class="col-xs-12" id="comments-container">
+        {% include 'admin_panel/comments/rendered_comments.html' %}
+    </div>
+    {% if has_more %}
+        <div class="col-xs-12 text-center">
+            <a class="btn btn-sm btn-warning" onclick="loadMore($(this), $(this).parent().parent().find('#comments-container'), '{% url 'get_more_comments' comments_type=type %}')">Еще..</a>
+        </div>
+    {% endif %}
+</div>

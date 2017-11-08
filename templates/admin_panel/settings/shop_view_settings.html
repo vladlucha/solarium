@@ -1,0 +1,51 @@
+{% load staticfiles %}
+
+<h3>Настройки страницы товаров</h3>
+<br>
+<form action="{% url 'update_shop_view_settings' %}" method="POST" id="shop-settings-form">
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="col-xs-8">
+            <div class="form-group">
+                <label for="new-brand-name">Заглавие:</label>
+                <input type="text" class="" name="title" id="new-item-name" placeholder="Заголовок.."
+                       value="{{ settings.title|get }}" required><br>
+            </div>
+
+            <div class="form-group">
+                <label for="new-brand-name">Описание:</label>
+                <textarea class="" name="description" placeholder="Описание.."
+                          required>{{ settings.description|get }}</textarea>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <label for="brand-thumbnail">Изображение:</label>
+            <a onclick="addPostThumbnail('new-item-thumbnail-{{ settings.pk }}', 'new-item-thumbnail-container-{{ settings.pk }}')" id="item-thumbnail">
+                <img src="{% if settings.thumbnail %}{{ settings.thumbnail.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
+                     id="new-item-thumbnail-{{ settings.pk }}" class="new-brand-thumbnail"/>
+                <input type="hidden" name="thumbnail" id="new-item-thumbnail-container-{{ settings.pk }}" value="{{ settings.thumbnail.pk }}" required>
+            </a>
+        </div>
+        <div class="col-xs-12">
+            <a class="btn btn-success" id="save-btn" onclick="validateForm('shop-settings-form')">Сохранить</a>
+        </div>
+    </div>
+
+    <br>
+</form>
+
+<hr>
+<h3>Синхронизация с VK</h3>
+{% if settings.sync_in_process %}
+    <p><b>Синхронизация идет в данный момент, пожалуйста подождите.<br>Количество оставшихся альбомов для синхронизации: {{ settings.count_of_jobs }}</b></p>
+    <p><small class="text-muted">Для обновления счетчика перезагрузите страницу.</small></p>
+
+{% endif %}
+<form method="POST" action="{% url 'synchronize_media' %}">
+    <button type="submit" {% if settings.sync_in_process %}disabled{% endif %} class="btn btn-warning btn-md">Синхронизировать медиа данные</button>
+</form>
+
+<hr>
+<h3>А кто это тут у нас?</h3>
+{% online_users %}

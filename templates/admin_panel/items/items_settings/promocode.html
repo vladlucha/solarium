@@ -1,0 +1,26 @@
+<tr>
+    <script>
+        $(document).ready(function() {
+            $('#item_type-{{ item_type.pk }}, #item_type-{{ item_type.pk }}-value').editable({
+                mode: 'inline',
+                ajaxOptions: {
+                    type: 'POST'
+                }
+            });
+        });
+    </script>
+    <td id="promocode-{{ promocode.pk }}-container" class="material-container">
+        <div class="row">
+            <div class="col-xs-11" style="word-break: break-all; font-size: 17px;">
+                <a href="#" id="item_type-{{ item_type.pk }}" data-type="text" data-name="code" data-pk="{{ promocode.pk }}" data-params="{csrfmiddlewaretoken: '{{csrf_token}}' }" data-url="{% url 'update_promocode' promocode_id=promocode.pk %}">{{ promocode.code }}</a>:
+                <a href="#" id="item_type-{{ item_type.pk }}-value" data-type="text" data-name="pr_value" data-pk="{{ promocode.pk }}" data-params="{csrfmiddlewaretoken: '{{csrf_token}}' }" data-url="{% url 'update_promocode' promocode_id=promocode.pk %}">{{ promocode.value }}</a>%
+            </div>
+            <div class="col-xs-1">
+                <form action="{% url 'delete_promocode' promocode_id=promocode.pk %}" method="POST" hidden>
+                    {% csrf_token %}
+                </form>
+                <a class="pull-right btn btn-default" onclick="$(this).parent().find('form').submit()"><i class=" text-danger fa fa-times" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </td>
+</tr>

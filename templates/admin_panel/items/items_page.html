@@ -1,0 +1,18 @@
+{% load staticfiles %}
+<script src="{% static 'salarium/js/items_settings.js' %}"></script>
+
+{% include 'admin_panel/after_redirect_notifications.html' %}
+
+<br>
+<ul class="nav nav-pills">
+    <li class="{{ items_page }}"><a href="{% url 'items' %}">Товары</a></li>
+    <li class="{{ items_settings_page }}"><a href="{% url 'items_settings' %}">Размеры и материалы</a></li>
+    <li class="{{ items_types_page }}"><a href="{% url 'item_types' %}">Типы товаров</a></li>
+    <li class="{{ promocodes_page }}"><a href="{% url 'promocodes' %}">Промокоды</a></li>
+    <li class="{{ sales_page }}"><a href="{% url 'sales' %}">Скидки</a></li>
+</ul>
+
+<div>
+    {% include current_items_page %}
+</div>
+

@@ -1,0 +1,51 @@
+version: '2'
+services:
+  combinedserver:
+     extends:
+       file: docker-compose.base.yml
+       service: interfaceserver
+     command: bash -c "ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &&
+      echo $TZ > /etc/timezone && grunt; python manage.py makemigrations; python manage.py migrate; python manage.py loaddata init_data.json; python set_utf_collation.py; python manage.py runserver 0.0.0.0:8000"
+     volumes:
+       - ./templates:/salarium/templates
+       - ./static/images:/salarium/static/images
+       - ./static/salarium/css:/salarium/static/salarium/css
+       - ./static/salarium/js:/salarium/static/salarium/js
+       - ./admin_panel:/salarium/admin_panel
+       - ./authentication:/salarium/authentication
+       - ./basket:/salarium/basket
+       - ./blog:/salarium/blog
+       - ./brand:/salarium/brand
+       - ./categories:/salarium/categories
+       - ./comments:/salarium/comments
+       - ./customer:/salarium/customer
+       - ./emails:/salarium/emails
+       - ./instagram_parser:/salarium/instagram_parser
+       - ./item:/salarium/item
+       - ./media_library:/salarium/media_library
+       - ./messages:/salarium/messages
+       - ./news:/salarium/news
+       - ./notifications:/salarium/notifications
+       - ./posts:/salarium/posts
+       - ./salarium:/salarium/salarium
+       - ./shop:/salarium/shop
+       - ./slider:/salarium/slider
+       - ./tags:/salarium/tags
+       - ./settings:/salarium/settings
+       - ./chat:/salarium/chat
+       - ./entrypoint-worker.sh:/salarium/entrypoint-worker.sh
+       - ./entrypoint-interface.sh:/salarium/entrypoint-interface.sh
+     environment:
+       - DJANGO_DEBUG=true
+       - DJANGO_SECRET_KEY
+     depends_on:
+       - db
+       - redis
+  db:
+    extends:
+      file: docker-compose.base.yml
+      service: db
+  redis:
+    extends:
+      file: docker-compose.base.yml
+      service: redis

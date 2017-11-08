@@ -1,0 +1,33 @@
+<tr id="new-sale-container">
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#new-sale-date-of-end').datetimepicker({
+                viewMode: 'years',
+                format: 'YYYY-MM-DD HH:mm'
+            });
+            $('#new-sale-date-of-start').datetimepicker({
+                viewMode: 'years',
+                format: 'YYYY-MM-DD HH:mm'
+            });
+        });
+    </script>
+    <td class="text-center" width="250">
+        <input type="text" name="name" id="new-sale-name" class="form-date" placeholder="Название скидки.." value="{{ sale_data.name }}"/>
+        {% if 'name' in errors.keys %}<small class="text-danger">{{ errors.name }}</small>{% endif %}
+    </td>
+    <td class="text-center">
+        <input type='text' class="" id='new-sale-date-of-start' placeholder="Дата начала..." value="{{ sale_data.date_of_start }}"/>
+        {% if 'date_of_start' in errors.keys %}<small class="text-danger">{{ errors.date_of_start }}</small>{% endif %}
+    </td>
+    <td class="text-center">
+        <input type='text' class="" id='new-sale-date-of-end' placeholder="Дата окончания..." value="{{ sale_data.date_of_end }}"/>
+        {% if 'date_of_end' in errors.keys %}<small class="text-danger">{{ errors.date_of_end }}</small>{% endif %}
+    </td>
+    <td class="text-center" width="150">
+        <input type="number" name="rate" id="new-sale-rate" class="form-date" placeholder="Размер" value="{{ sale_data.rate }}"/>
+        {% if 'rate' in errors.keys %}<small class="text-danger">{{ errors.rate }}</small>{% endif %}
+    </td>
+    <td class="text-center" width="100">
+        <a class="btn btn-success btn-sm" onclick="createSale('{% url 'create_sale' %}', '{{ csrf_token }}');"><i class="glyphicon glyphicon-plus"></i></a>
+    </td>
+</tr>

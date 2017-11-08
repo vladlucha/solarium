@@ -1,0 +1,130 @@
+
+
+<div class="col-md-3 col-sm-4 col-xs-12 sidebar-wrap border shop-page-sidebar ">
+    <form method="get">
+        <ul class="main-sidebar offcanvas-nav">
+            <li class="widget widget_layered_nav menu-item-has-children dropdown current-menu-ancestor">
+                <a class="dropdown-hover collapsed" data-toggle="collapse" href="#categories"
+                   aria-expanded="{% if selected_categories %}true{% else %}false{% endif %}">
+                    <span class="caret"></span>
+                    <h4 class="widget-title">Категории</h4>
+                </a>
+                <ul class="collapse {% if selected_categories %}in{% endif %}" id="categories">
+                    {% for category in categories %}
+                        <li>
+                            <input id="category-{{ category.pk }}" value="{{ category.pk }}"
+                                   type="checkbox" name="categories" hidden
+                                   {% if category.pk in selected_categories %}checked{% endif %}/>
+                            <label for="category-{{ category.pk }}"></label>
+                            {{ category.name }}
+                            <small class="count">{{ category.items.all|length }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li class="widget widget_layered_nav menu-item-has-children dropdown current-menu-ancestor">
+                <a data-toggle="collapse" href="#brands"
+                   aria-expanded="{% if selected_brands %}true{% else %}false{% endif %}"
+                   class=" dropdown-hover collapsed">
+                    <span class="caret"></span>
+                    <h4 class="widget-title">Бренды</h4>
+                </a>
+                <ul class="collapse {% if selected_brands %}in{% endif %}" id="brands">
+                    {% for brand in brands %}
+                        <li>
+                            <input id="brand-{{ brand.pk }}" value="{{ brand.pk }}" type="checkbox"
+                                   name="brands" hidden
+                                   {% if brand.pk in selected_brands %}checked{% endif %}/>
+                            <label for="brand-{{ brand.pk }}"></label>
+                            {{ brand.name }}
+                            <small class="count">{{ brand.items.all|length }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li class="widget widget_layered_nav menu-item-has-children dropdown current-menu-ancestor">
+                <a data-toggle="collapse" href="#wear_type"
+                   aria-expanded="{% if selected_types %}true{% else %}false{% endif %}"
+                   class=" dropdown-hover collapsed">
+                    <span class="caret"></span>
+                    <h4 class="widget-title">Одежда</h4></a>
+                <ul class="collapse {% if selected_types %}in{% endif %}" id="wear_type">
+                    {% for type in item_types %}
+                        <li>
+                            <input id="type-{{ type.pk }}" value="{{ type.pk }}" type="checkbox"
+                                   name="types" hidden
+                                   {% if type.pk in selected_types %}checked{% endif %}/>
+                            <label for="type-{{ type.pk }}"></label>
+                            {{ type.name }}
+                            <small class="count">{{ type.items.all|length }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li class="widget widget_layered_nav menu-item-has-children dropdown current-menu-ancestor">
+                <a data-toggle="collapse" href="#size"
+                   aria-expanded="{% if selected_sizes %}true{% else %}false{% endif %}"
+                   class=" dropdown-hover collapsed">
+                    <span class="caret"></span>
+                    <h4
+                        class="widget-title">Размер</h4></a>
+                <ul class="collapse {% if selected_sizes %}in{% endif %}" id="size">
+                    {% for size in sizes %}
+                        <li>
+                            <input id="size-{{ size.pk }}" value="{{ size.pk }}" type="checkbox"
+                                   name="sizes" hidden
+                                   {% if size.pk in selected_sizes %}checked{% endif %}/>
+                            <label for="size-{{ size.pk }}"></label>
+                            {{ size.name }}
+                            <small class="count">{{ size.items_count }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li class="widget widget_layered_nav menu-item-has-children dropdown current-menu-ancestor widget_price_filter">
+                <a data-toggle="collapse" href="#price"
+                   aria-expanded="{% if selected_min_price or selected_max_price %}true{% else %}false{% endif %}"
+                   class=" dropdown-hover collapsed">
+                    <span class="caret"></span><h4
+                        class="widget-title">Цена</h4></a>
+                <ul class="collapse {% if selected_min_price or selected_max_price %}in{% endif %}"
+                    id="price">
+                    <div class="price_slider_wrapper">
+                        <input type="text" class="slider" name="price_range"
+                               data-slider-min="{{ min_price }}" data-slider-max="{{ max_price }}"
+                               data-slider-step="1" data-slider-value="[
+                                {% if selected_min_price %}{{ selected_min_price }}{% else %}{{ min_price }}{% endif %},
+                                {% if selected_max_price %}{{ selected_max_price }}{% else %}{{ max_price }}{% endif %}]"/>
+                    </div>
+                </ul>
+            </li>
+            <li class="hidden menu-item-has-children dropdown current-menu-ancestor  widget_product_categories nav">
+                <a data-toggle="collapse" href="#color" aria-expanded="false"
+                   class=" dropdown-hover collapsed">
+                    <span class="caret"></span><h4
+                        class="widget-title">Цвет</h4></a>
+                <ul class="collapse product color" id="color">
+                    <li class="white"></li>
+                    <li class="gray"></li>
+                    <li class="black"></li>
+                    <li class="red"></li>
+                    <li class="blue"></li>
+                    <li class="green"></li>
+                    <li class="yellow"></li>
+                    <li class="purp"></li>
+                </ul>
+            </li>
+            <li>
+            <span class="mailchimp-form">
+                <div class="mailchimp-form-content clearfix">
+                    <button onclick="moveSlide('slide2')"
+                            class="btn mailchimp-submit"
+                            style="width: calc(100% + 10px); margin-top: 40px">
+                        Применить
+                    </button>
+                </div>
+            </span>
+            </li>
+        </ul>
+    </form>
+</div>

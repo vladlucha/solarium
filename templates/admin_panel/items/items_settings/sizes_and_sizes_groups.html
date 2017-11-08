@@ -1,0 +1,24 @@
+
+<div class="row">
+    <div class="col-xs-12 text-left material-shadow" style="background-color: white; padding: 5px;">
+        <h4>Размеры</h4>
+        <div class="panel-group" id="size-groups-placeholder">
+            <form action="{% url 'create_size_group' %}" method="POST" id="create-new-size-group">
+                {% csrf_token %}
+                <div class="input-group ">
+                  <input type="text" class="" name="name" placeholder="Добавить тип размеров...">
+                    <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-plus"></i></button>
+                  </span>
+                </div>
+            </form>
+            <div id="size-groups-container">
+                {% for size_group in size_groups %}
+                    {% include 'admin_panel/items/items_settings/size_group.html' %}
+                {% endfor %}
+            </div>
+            {% include 'admin_panel/no_data_message.html' with data=size_groups message='Размеров еще нет' %}
+
+        </div>
+    </div>
+</div>

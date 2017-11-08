@@ -1,0 +1,46 @@
+{% if request.session.view_type == 'list' %}
+<div class="brand-item row">
+    <hr>
+    <div class="col-md-2">
+        <a onClick="createItem('{% url 'create_item' item_id=item.pk %}', '{{ csrf_token }}')">
+            <img class="img-responsive" src="{{ item.thumbnail.url }}" height="80">
+        </a>
+    </div>
+    <div class="col-md-6">
+        <h3>
+            <a onClick="createItem('{% url 'create_item' item_id=item.pk %}', '{{ csrf_token }}')">
+                <span class="post-title post-title-dark">{{ item.name }}</span>
+            </a>
+        </h3>
+        <div class="brand-description excerpt"><h4>{{ item.description | safe }}</h4></div>
+    </div>
+    <div class="col-md-4 text-center">
+        <h4>{{ item.price }} руб.</h4>
+    </div>
+    <hr>
+</div>
+{% elif request.session.view_type == 'items' %}
+    <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">
+        <div class="item-card material-shadow">
+            <a onClick="createItem('{% url 'create_item' item_id=item.pk %}', '{{ csrf_token }}')">
+                <div class="item-thumbnail">
+                    <img class="img-responsive" src="{{ item.thumbnail.url }}">
+                </div>
+            </a>
+            <h4>
+                <a onClick="createItem('{% url 'create_item' item_id=item.pk %}', '{{ csrf_token }}')">{{ item.name }}</a>
+            </h4>
+            <div class="description">{{ item.description | safe }}</div>
+            <span class="bottom left">
+                <p>
+                    {{ item.price }}<small>BYN</small>
+                </p>
+            </span>
+            <span class="bottom right">
+                <p>
+                    <small><a href="#">{{ item.country }}</a>
+                </p>
+            </span>
+        </div>
+    </div>
+{% endif %}

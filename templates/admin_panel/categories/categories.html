@@ -1,0 +1,39 @@
+{% include 'admin_panel/after_redirect_notifications.html' %}
+<div class="container">
+    <div class="row">
+        <br>
+
+        <form action="{% url 'create_category' %}" method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" class="" name="category_name" placeholder="Создать категорию">
+        <span class="input-group-btn">
+        <button class="btn btn-success" type="submit">Создать</button>
+      </span>
+            </div>
+        </form>
+
+        <hr/>
+        <input id="livesearch" type="text" class="" placeholder="Поиск.."/>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Описание</th>
+                <th>Кол-во товаров</th>
+                <th class="text-center" width="50">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for category in categories %}
+                {% include 'admin_panel/categories/category_item.html' %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% include 'admin_panel/no_data_message.html' with data=categories message='Категорий еще нет' %}
+    </div>
+</div>
+
+{% load staticfiles %}
+<script src="{% static 'salarium/js/categories.js' %}"></script>

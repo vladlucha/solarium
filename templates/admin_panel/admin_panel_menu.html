@@ -1,0 +1,76 @@
+<nav id="menu" class="menu slideout-menu">
+{#    <header class="menu-header">#}
+{#      <div class="menu-header-title">Menu</div>#}
+{#    </header>#}
+
+    <section class="menu-section">
+        <h4 class="menu-section-title">Контент</h4>
+        <ul class="menu-section-list">
+            <li class="{{ dashboard }}" role="presentation">
+                <a href="{% url 'admin_panel' %}"><div>Информация</div></a>
+            </li>
+            <li class="{{ categories_is_active }}" role="presentation">
+                <a href="{% url 'categories' %}"><div>Категории</div></a>
+            </li>
+            <li class="{{ items_is_active }}" role="presentation">
+                <a href="{% url 'items' %}"><div>Товары</div></a>
+            </li>
+            <li class="{{ brands }}" role="presentation">
+                <a href="{% url 'brands' %}"><div>Бренды</div></a>
+            </li>
+            <li class="{{ posts_is_active }}" role="presentation">
+                <a href="{% url 'all_posts' %}"><div>Статьи</div></a>
+            </li>
+        </ul>
+    </section>
+
+    <section class="menu-section">
+        <h4 class="menu-section-title">Пользователи</h4>
+        <ul class="menu-section-list">
+            <li class="{{ user_list }}" role="presentation">
+                <a href="{% url 'user_list' %}"><div>Список пользователей</div></a>
+            </li>
+        </ul>
+    </section>
+
+    <section class="menu-section">
+        <h4 class="menu-section-title">Активность</h4>
+        <ul class="menu-section-list">
+            <li class="{{ comments_page }}" role="presentation"><a href="{% url 'get_all_comments' active_type='new' %}"><div>Комментарии</div></a></li>
+            <li class="{{ admin_orders }}" role="presentation"><a href="{% url 'admin_orders' %}"><div>Заказы</div></a></li>
+            <li class="{{ users_messages }}" role="presentation"><a href="{% url 'user_messages' %}"><div>Сообщения</div></a></li>
+        </ul>
+    </section>
+
+    <section class="menu-section">
+        <h3 class="menu-section-title">Медиа</h3>
+        <ul class="menu-section-list">
+            <li class="{{ media }}" role="presentation">
+                <a href="{% url 'media_library_all' %}"><div>Изображения</div></a>
+            </li>
+            <li class="{{ sliders_page }}" role="presentation">
+                <a href="{% url 'sliders' %}"><div>Слайдер</div></a>
+            </li>
+        </ul>
+    </section>
+
+    <section class="menu-section">
+        <h3 class="menu-section-title">E-mail расылка</h3>
+        <ul class="menu-section-list">
+            <li class="{{ email_templates }}" role="presentation">
+                <a href="{% url 'email_templates' %}"><div>Шаблоны</div></a>
+            </li>
+            <li class="{{ email_mailing }}" role="presentation">
+                <a href="{% url 'email_mailing' %}"><div>Рассылка</div></a>
+            </li>
+        </ul>
+    </section>
+    <section class="menu-section">
+        <h3 class="menu-section-title">Настройки</h3>
+        <ul class="menu-section-list">
+            <li class="{{ shop_view_settings }}" role="presentation">
+                <a href="{% url 'shop_view_settings' %}"><div>Настройки магазина</div></a>
+            </li>
+        </ul>
+    </section>
+</nav>

@@ -1,0 +1,26 @@
+<tr>
+    <script>
+        $(document).ready(function() {
+            $('#item_type-{{ item_type.pk }}').editable({
+                mode: 'inline',
+                ajaxOptions: {
+                    type: 'POST'
+                }
+            });
+        });
+    </script>
+    <td id="item_type-{{ item_type.pk }}-container" class="material-container">
+        <div class="row">
+            <div class="col-xs-11" style="word-break: break-all">
+                <a href="#" id="item_type-{{ item_type.pk }}" data-type="text" data-pk="{{ item_type.pk }}" data-name="name" data-params="{csrfmiddlewaretoken: '{{csrf_token}}' }" data-url="{% url 'update_item_type' %}" data-title="Название типа товара..">{{ item_type.name }}</a>
+            </div>
+            <div class="col-xs-1">
+                <form action="{% url 'delete_item_type' %}" method="POST" hidden>
+                    {% csrf_token %}
+                    <input type="hidden" name="pk" value="{{ item_type.pk }}"/>
+                </form>
+                <a class="pull-right btn btn-default" onclick="$(this).parent().find('form').submit()"><i class=" text-danger fa fa-times" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </td>
+</tr>

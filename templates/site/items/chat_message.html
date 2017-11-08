@@ -1,0 +1,17 @@
+{% load staticfiles %}
+<li class="{% if message.author.pk == current_user.pk %}right{% else %}left{% endif %} clearfix">
+    <span class="chat-img pull-{% if message.author.pk == request.user.pk %}right{% else %}left{% endif %}" style="padding-right: 5px; padding-left: 5px;">
+        <img src="{% if message.author.thumbnail.url == none %}{% static 'images/default.png' %}{% else %}{{ message.author.thumbnail.url }}{% endif %}" alt="User Avatar" class="img-circle"/>
+    </span>
+    <div class="chat-body clearfix">
+        <div class="message-header">
+            <strong class="primary-font">{{ message.author.username }}</strong>
+            <small class="pull-right text-muted">
+                <span class="glyphicon glyphicon-time"></span> {{ message.timestamp }}
+            </small>
+        </div>
+        <p>
+            {{ message.message }}
+        </p>
+    </div>
+</li>

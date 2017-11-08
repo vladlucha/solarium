@@ -1,0 +1,73 @@
+{% load staticfiles %}
+{% load cloudinary %}
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.js"></script>
+
+<br>
+<ul class="breadcrumb">
+    <li><a href="#"><a href="{% url 'brands' %}"><span>Бренды</span></a></a></li>
+    <li class="active">{% if brand %}{{ brand.name }}{% else %}Новый бренд{% endif %}</li>
+</ul>
+
+<div class="new-brand">
+    <form action="{% url 'create_or_update_brand' %}" method="POST" id="new-brand-form">
+        {% csrf_token %}
+        {% if brand %}
+            <input type="hidden" name="pk" value="{{ brand.pk }}">
+        {% endif %}
+        <div class="row">
+            <div class="col-xs-4 col-md-3">
+                <label for="brand-thumbnail">Миниатюра:</label>
+                <a onclick="addPostThumbnail('new-brand-thumbnail', 'new-brand-thumbnail-container')"
+                   id="brand-thumbnail">
+                    <img src="
+                            {% if brand.thumbnail.url == none %}{% static 'images/default.png' %}{% else %}{{ brand.thumbnail.url }}{% endif %}"
+                         id="new-brand-thumbnail" class="new-brand-thumbnail"/>
+                    <input type="hidden" name="thumbnail" id="new-brand-thumbnail-container"
+                           value="{{ brand.thumbnail.pk }}" required>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-9">
+                <label for="brand-banner">Баннер:</label>
+                <a onclick="addPostThumbnail('new-brand-banner', 'new-brand-banner-container')" id="brand-banner">
+                    <img src="
+                            {% if brand.banner.url == none %}{% static 'images/default.png' %}{% else %}{{ brand.banner.url }}{% endif %}"
+                         id="new-brand-banner" class="new-brand-thumbnail"/>
+                    {% if brand %}
+                        <input type="hidden" name="pk" value="{{ brand.pk }}">
+                    {% endif %}
+                    <input type="hidden" name="banner" id="new-brand-banner-container"
+                           value="{{ brand.banner.pk }}" required>
+                </a>
+            </div>
+        </div>
+        <br>
+
+        <label for="new-brand-name">Название:</label>
+        <input type="text" class="" name="name" id="new-brand-name" placeholder="Имя бренда.." value="{{ brand.name }}"
+               required><br>
+
+        <label for="brand-description">Описание:</label>
+        <textarea id="brand-description" name="description" placeholder="Описание бренда..." class="" rows="11">{{ brand.description }}</textarea><br>
+
+        <label for="new-brand-country">Страна бренда:</label>
+        <input type="text" class="" name="country" id="new-brand-country" placeholder="Страна бренда.."
+               value="{{ brand.country }}"><br>
+
+        <label for="brand-status">Статус:</label><br>
+        <select class="selectpicker" name="status" id="brand-status">
+            {% for status in statuses %}
+                <option {% if brand and status.value == brand.status %}selected{% endif %} value="{{ status.value }}">{{ status.translate }}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <br>
+    <a onclick="validateForm('new-brand-form')" class="btn btn-success" id="save-btn">Сохранить</a>
+    {% if brand %}
+        <a onclick="confirmation(function(){ $('#delete_brand_form').submit(); })" class="btn btn-danger">Удалить</a>
+        <form method="POST" action="{% url 'delete_brand' brand_id=brand.pk %}" id="delete_brand_form"></form>
+    {% endif %}
+</div>
+<br><br><br><br>
+
+<script src="{% static 'salarium/js/posts.js' %}"></script>

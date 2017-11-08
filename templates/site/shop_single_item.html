@@ -1,0 +1,239 @@
+{% load staticfiles %}
+<div id="wrapper" class="wide-wrap">
+    <div class="offcanvas-overlay"></div>
+    <div class="new-parallax">
+        <div class="container-fluid">
+            <div class="row equal">
+                <div class="col-xs-7">
+                    <div class="img-background-container">
+                        <img src="{{ item.thumbnail.url }}" class="img-background item">
+                    </div>
+
+
+                    <img src="{{ item.thumbnail.url }}" class="img-active item">
+                    <div class="arrows">
+                        <img src="{% static 'salarium/img/L.png' %}" onclick="onLeft()" class="img-l">
+                        <img src="{% static 'salarium/img/R.png' %}" onclick="onRight()" class="img-r">
+                    </div>
+
+
+                </div>
+                <div class="col-xs-4">
+                    <div class="description">
+                        <div class="title">
+                            <p id="title">{{ item.name }}</p>
+                        </div>
+                        <div class="texts">
+                            <p class="title2">Состав: {% for material in item.materials.all %}{{ material.name }}
+                                {% if forloop.counter < item.materials.all|length %}, {% endif %}{% endfor %}</p>
+                            <p class="title2">Страна-производитель: {{ item.manufacturer_country }}</p>
+                            <p class="title2">Страна бренда: {{ item.brand.country }}</p>
+                        </div>
+
+                        <form id="new-order" action="{% url 'create_order' %}">
+                            {% if sizes %}
+                                <div id="last-item" class="hidden">
+                                    Последний на складе
+                                </div>
+                                <div class="sizes">
+                                    Размер:
+                                    <ul class="pick-sizes">
+                                        {% for item_count in sizes %}
+                                            <a onclick="selectSize({{ item_count.pk }})">
+                                                <li id="container-size-{{ item_count.pk }}" data-count="{{ item_count.current_count }}" class="size {% if item_count.current_count <= 0 %}disable{% endif %}">{{ item_count.size.name }}</li>
+                                            </a>
+                                            {% if item_count.current_count > 0 %}
+                                                <input class="size-input" id="size-{{ item_count.pk }}" type="radio" name="{{ item_count.pk }}" {% if item_count.current_count <= 0 %}disabled{% endif %} hidden>
+                                                <small class="hidden">{{ item_count.size.name }}</small>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% else %}
+                                <small class="text-muted">Нет на складе</small>
+                            {% endif %}
+                            <input type="hidden" name="item-pk" value="{{ item.pk }}">
+                        </form>
+
+                        <div class="price">{{ item.item_price|floatformat:2 }} руб.</div>
+                        <div class="brand">{% for category in item.categories.all %}{{ category.name }}
+                            {% if forloop.counter < item.categories.all|length %}, {% endif %} {% endfor %}</div>
+                        <span class="mailchimp-form">
+                            <div class="mailchimp-form-content clearfix">
+                                <button onclick="createOrder('{{ csrf_token }}', $('#new-order'))" class="btn mailchimp-submit">Добавить в корзину</button>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid hidden-sm hidden-xs">
+            <div class="row">
+                <div class="col-xs-7">
+                    <div class="preview">
+                        <div class="text-center">
+                            <br>
+                            <br>
+                            <img class="item-preview" src="{{ item.thumbnail.url }}">
+                            {% for image in item.gallery.all %}
+                                <img class="item-preview parts" src="{{ image.url }}">
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+{% if recent|length > 0 %}
+    <div class="shop shop2">
+        <div class="container">
+            <h5 class="col-sm-12">Недавно просматривали</h5>
+        </div>
+        <div class="content-container commerce page-layout-left-sidebar">
+            <div class="container">
+                <ul class="products products-list">
+                    {% for recent_product in recent %}
+                        <li class="product col-md-3 col-sm-6"><a
+                                href="{% url 'get_item' item_slug=recent_product.slug %}">
+                            <div class="product-container">
+                                <figure>
+                                    <div class="product-wrap">
+                                        <div class="product-images">
+                                            <div class="shop-loop-thumbnail shop-loop-front-thumbnail">
+                                                <img class="main-page-item-thumbnail-width" width="375" height="505"
+                                                     style="background-image: url('{{ recent_product.thumbnail.url }}')"
+                                                     alt=""/>
+                                            </div>
+                                            <div class="shop-loop-thumbnail shop-loop-back-thumbnail">
+                                                <img class="main-page-item-thumbnail-width" width="375" height="505"
+                                                     style="background-image: url('{{ recent_product.thumbnail.url }}')"
+                                                     alt=""/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <figcaption>
+                                        <div class="shop-loop-product-info">
+                                            <div class="info-content-wrap">
+                                                <h3 class="product_title">
+                                                    <a href="{% url 'get_item' item_slug=recent_product.slug %}"
+                                                       style="text-transform: uppercase">{{ recent_product.name }}</a>
+
+                                                </h3>
+                                                <p class="product">{{ recent_product.item_price|floatformat:2 }} руб.</p>
+                                            </div>
+                                        </div>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<div class="shop">
+    <div class="container">
+        <h5 class="col-sm-12">Новые товары</h5>
+    </div>
+    <div class="content-container commerce page-layout-left-sidebar">
+        <div class="container">
+            <ul class="products products-list">
+                {% for new_item in new_items %}
+                    <li class="product col-md-3 col-sm-6"><a href="{% url 'get_item' item_slug=new_item.slug %}">
+                        <div class="product-container">
+                            <figure>
+                                <div class="product-wrap">
+                                    <div class="product-images">
+                                        <div class="shop-loop-thumbnail shop-loop-front-thumbnail">
+                                            <img class="main-page-item-thumbnail-width" width="375" height="505"
+                                                 style="background-image: url('{{ new_item.thumbnail.url }}')" alt=""/>
+                                        </div>
+                                        <div class="shop-loop-thumbnail shop-loop-back-thumbnail">
+                                            <img class="main-page-item-thumbnail-width" width="375" height="505"
+                                                 style="background-image: url('{{ new_item.thumbnail.url }}')" alt=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <figcaption>
+                                    <div class="shop-loop-product-info">
+                                        <div class="info-content-wrap">
+                                            <h3 class="product_title">
+                                                <a href="{% url 'get_item' item_slug=new_item.slug %}"
+                                                   style="text-transform: uppercase">{{ new_item.name }}</a>
+
+                                            </h3>
+                                            <p class="product">
+                                                {% if product.price == product.item_price %}{{ product.price }}  руб.{% endif %}
+                                                {% if product.price != product.item_price %}<span>{{ product.price }}  руб.</span>{{ product.item_price|floatformat:2 }} руб.{% endif %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function(){
+        $('.img-background-container').css('max-height', $('.description').height().toString() + 'px');
+        $('.img-background-container').css('min-height', $('.description').height().toString() * 0.88 + 'px');
+    });
+
+    var json = '[' +
+            '{' +
+            '\'img\': \'{{ item.thumbnail.url }}\', ' +
+            '\'imgPreview\': [\'{{ item.thumbnail.url }}\'] ' +
+            '}, ' +
+            {% for image in item.gallery.all %}
+                '{' +
+                '\'img\': \'{{ image.url }}\', ' +
+                '\'imgPreview\': [\'{{ image.url }}\'] ' +
+                '}' +
+                {% if forloop.counter < item.gallery.all|length %}',' + {% endif %}
+            {% endfor %}
+            ']';
+    let products = JSON.parse(json.replace(/\'/g, '"'));
+    let activeItem = 0;
+    changeSlide();
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let searchColor = document.getElementsByClassName('color');
+        if (searchColor && searchColor.length) {
+            let colorsDivs = searchColor[0].childNodes;
+            let colors = Array.prototype.slice.call(colorsDivs, 0)
+                    .filter(function (el) {
+                        return el.localName === 'li'
+                    });
+            colors.forEach(function (color) {
+                color.addEventListener('click', function () {
+                    color.style.outline = (!color.style.outline)
+                            ? '5px solid #f1f1f1'
+                            : ""
+                })
+            })
+        }
+    });
+
+    function onRight() {
+        activeItem = (++activeItem % products.length);
+        changeSlide(products[activeItem]);
+    }
+
+    function onLeft() {
+        activeItem = (--activeItem % products.length);
+        changeSlide(products[activeItem]);
+    }
+
+
+</script>
+
+{% include 'basic_templates/contact_info.html' %}

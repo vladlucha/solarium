@@ -1,0 +1,44 @@
+version: '2'
+services:
+
+  database:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: docker
+      MYSQL_DATABASE: docker
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+    ports:
+      - "5432:3306"
+
+  interfaceserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: /app/entrypoint-interface.sh
+    working_dir: /app
+    ports:
+      - 8000:8000
+    environment:
+      - DJANGO_SECRET_KEY
+
+  workerserver:
+    build:
+      context: .
+      dockerfile: Dockerfile-worker
+    working_dir: /app
+    command: /app/entrypoint-worker.sh
+    environment:
+      - DJANGO_SECRET_KEY
+
+  redis:
+    image: redis:3.0-alpine
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile-worker
+    working_dir: /app
+    command: /app/entrypoint-worker.sh
+    environment:
+      - DJANGO_SECRET_KEY

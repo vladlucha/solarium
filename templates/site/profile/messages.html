@@ -1,0 +1,36 @@
+{% load staticfiles %}
+
+{% include 'admin_panel/after_redirect_notifications.html' %}
+<script src="{% static 'salarium/js/profile.js' %}"></script>
+<script src="{% static 'salarium/js/chat.js' %}"></script>
+<!-- Page Content -->
+<div class="container">
+    <br><br>
+    {% include 'site/profile/profile_avatar.html' %}
+    <div class="row comments equal">
+
+        <div class="col-xs-3">
+            {% include 'site/profile/profile_menu.html' %}
+        </div>
+
+        <!-- Blog Post Content Column -->
+
+        <div class="col-xs-9 profile-data-container">
+            <div class='chatbox-container'>
+                <div class='chatbox full-width '>
+                    {% include 'site/items/full_page_chat.html' with user=request.user %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<br><br><br>
+<script>
+    new Chat({{ request.user.pk }});
+</script>
+{% include 'basic_templates/contact_info.html' %}
+

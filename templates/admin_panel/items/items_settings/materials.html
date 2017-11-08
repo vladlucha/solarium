@@ -1,0 +1,25 @@
+<div>
+    <div class="col-xs-12 text-left material-shadow" style="background-color: white; padding: 5px;">
+        <h4>Материалы</h4>
+
+        <form action="{% url 'create_material' %}" method="POST" id="new-material-name-form">
+            {% csrf_token %}
+            <div class="input-group ">
+                <input type="text" class="" name="name" placeholder="Добавить материал..." id="new-material-name">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-plus"></i></button>
+                </span>
+            </div>
+        </form>
+        {% if materials %}
+        <table class="table table-hover materials-table">
+            <tbody id="materials-container">
+            {% for material in materials %}
+                {% include 'admin_panel/items/items_settings/material.html' %}
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        {% include 'admin_panel/no_data_message.html' with data=materials message='Материалов еще нет' %}
+    </div>
+</div>

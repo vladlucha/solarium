@@ -1,0 +1,37 @@
+<div class="checkout-heading container col-8-grid">
+    <h1>Оформление заказа</h1>
+    <div class="row bs-wizard col-4-custom" style="border-bottom:0;">
+        <div class=" bs-wizard-step active">
+            <div class="progress">
+                <div class="progress-bar"></div>
+            </div>
+            <a onclick="moveSlide('slide1')" class="bs-wizard-dot">1</a>
+            <div class="bs-wizard-info text-center">Выбор товара</div>
+        </div>
+
+        <div class="bs-wizard-step disabled">
+            <div class="progress">
+                <div class="progress-bar"></div>
+            </div>
+            <a onclick="moveSlide('slide2')" class="bs-wizard-dot">2</a>
+            <div class="bs-wizard-info text-center">Заполнение формы</div>
+        </div>
+
+        <div class="bs-wizard-step disabled hidden" id="credit-card-payment-header">
+            <div class="progress">
+                <div class="progress-bar"></div>
+            </div>
+            <a onclick="moveSlide('slide3', true)" class="bs-wizard-dot">3</a>
+            <div class="bs-wizard-info text-center">Оплата</div>
+        </div>
+
+        <div class="bs-wizard-step disabled">
+            <div class="progress">
+                <div class="progress-bar"></div>
+            </div>
+            <a class="bs-wizard-dot" id="last-step-number">3</a>
+            <div class="bs-wizard-info text-center">Готово</div>
+        </div>
+
+    </div>
+</div>

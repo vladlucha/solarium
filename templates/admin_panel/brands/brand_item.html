@@ -1,0 +1,46 @@
+{% if request.session.view_type == 'list' %}
+<hr/>
+<div class="row brand-item">
+    <div class="col-md-2">
+        <a href="{% url 'create_brand' brand_id=brand.id %}"><img class="img-responsive" src="{{ brand.thumbnail.url }}"></a>
+    </div>
+    <div class="col-md-6">
+        <h3>
+            <a href="{% url 'create_brand' brand_id=brand.id %}">
+                <span>{{ brand.name }}</span>
+            </a>
+        </h3>
+        <div class="brand-description excerpt"><span>{{ brand.description | safe }}</span></div>
+    </div>
+    <div class="col-md-2 text-center">
+        <span>{{ brand.country }}</span>
+    </div>
+    <div class="col-md-2 text-center">
+        <strong class="status {{ brand.status }}">{{ brand.status }}</strong>
+    </div>
+</div>
+{% elif request.session.view_type == 'items' %}
+    <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">
+        <div class="item-card material-shadow">
+            <a href="{% url 'create_brand' brand_id=brand.id %}">
+                <div class="item-thumbnail">
+                    <img class="img-responsive" src="{{ brand.thumbnail.url }}">
+                </div>
+            </a>
+            <h4>
+                <a href="{% url 'create_brand' brand_id=brand.id %}">{{ brand.name }}</a>
+            </h4>
+            <div class="description">{{ brand.description | safe }}</div>
+            <span class="bottom left">
+                <p>
+                    <small><a href="#">{{ brand.country }}</a>, <a href="#">{{ brand.city }}</a></small>
+                </p>
+            </span>
+            <span class="bottom right">
+                <p>
+                    <small class="status {{ brand.status.name }}">{{ brand.status.name }}</small>
+                </p>
+            </span>
+        </div>
+    </div>
+{% endif %}

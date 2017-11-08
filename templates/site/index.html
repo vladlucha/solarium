@@ -1,0 +1,79 @@
+{% load staticfiles %}
+<div id="wrapper" class="wide-wrap">
+    {% include 'site/items/main_slider.html' %}
+    <div class="shop" id="main-container">
+        <div class="container">
+            <h5 class="col-sm-12">Новые товары</h5>
+        </div>
+        <div class="content-container commerce page-layout-left-sidebar">
+            <div class="container">
+                <ul class="products">
+                    {% for product in items %}
+                        <li class="product col-md-3 col-sm-6"><a href="{% url 'get_item' item_slug=product.slug %}">
+                            <div class="product-container">
+                                <figure>
+                                    <div class="product-wrap">
+                                        <div class="product-images">
+                                            <div class="shop-loop-thumbnail shop-loop-front-thumbnail">
+                                                <img class="main-page-item-thumbnail-width" width="375" height="505"
+                                                     style="background-image: url('{{ product.thumbnail.url }}')"
+                                                     alt=""/>
+                                            </div>
+                                            <div class="shop-loop-thumbnail shop-loop-back-thumbnail">
+                                                <img class="main-page-item-thumbnail-width" width="375" height="505"
+                                                     style="background-image: url('{{ product.thumbnail.url }}')"
+                                                     alt=""/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <figcaption>
+                                        <div class="shop-loop-product-info">
+                                            <div class="info-content-wrap">
+                                                <h3 class="product_title">
+                                                    <a href="{% url 'get_item' item_slug=product.slug %}"
+                                                       style="text-transform: uppercase">{{ product.name }}</a>
+
+                                                </h3>
+                                                <p class="product">
+                                                    {% if product.price == product.item_price %}{{ product.price }}  руб.{% endif %}
+                                                    {% if product.price != product.item_price %}<span>{{ product.price }}  руб.</span>{{ product.item_price|floatformat:2 }} руб.{% endif %}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class='blog blogtit'>
+        <div class="container">
+            <h5>Новое из блога</h5>
+        </div>
+        <div class="containerBlog" style="min-height: calc({{ posts|length }} * 480px + 50px)">
+            {% for post in posts %}
+
+                <div class="blog{{ forloop.counter }} blog-item">
+                    <a href="{% url 'get_post' post_slug=post.slug %}">
+                        <div class="image-wrapper" style="background-image: url({{ post.thumbnail.url }})">
+                            <img src="{{ post.thumbnail.url }}">
+                        </div>
+                        <h5>{{ post.title }}</h5>
+                        <p>{{ post.excerpt }}</p>
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+<!--scripts-->
+{% include 'basic_templates/contact_info.html' %}
+
+<script type='text/javascript' src='{% static 'salarium/js/vendor/index_main.js' %}'></script>

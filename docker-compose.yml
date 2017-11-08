@@ -1,0 +1,71 @@
+version: '2'
+services:
+  db:
+    extends:
+      file: docker-compose.base.yml
+      service: database
+
+  redis:
+    extends:
+      file: docker-compose.base.yml
+      service: redis
+
+  celery:
+    extends:
+      file: docker-compose.base.yml
+      service: celery
+    volumes:
+      - ./entrypoint-celery-worker.sh:/app/entrypoint-celery-worker.sh
+      - ./entrypoint-worker.sh:/app/entrypoint-worker.sh
+      - ./entrypoint-interface.sh:/app/entrypoint-interface.sh
+      - ./salarium:/app/salarium
+      - ./customer:/app/customer
+      - ./emails:/app/emails
+      - ./settings:/app/settings
+      - ./media_library:/app/media_library
+    links:
+      - redis
+    command:
+      bash -c "export C_FORCE_ROOT='true' && cd /app && python manage.py celeryd --concurrency=1 --loglevel=INFO --settings=salarium.settings"
+
+  combinedserver:
+    extends:
+      file: docker-compose.base.yml
+      service: interfaceserver
+    volumes:
+       - ./templates:/app/templates
+       - ./static/images:/app/static/images
+       - ./static/salarium/css:/app/static/salarium/css
+       - ./static/salarium/js:/app/static/salarium/js
+       - ./admin_panel:/app/admin_panel
+       - ./authentication:/app/authentication
+       - ./basket:/app/basket
+       - ./blog:/app/blog
+       - ./brand:/app/brand
+       - ./categories:/app/categories
+       - ./comments:/app/comments
+       - ./customer:/app/customer
+       - ./emails:/app/emails
+       - ./instagram_parser:/app/instagram_parser
+       - ./item:/app/item
+       - ./media_library:/app/media_library
+       - ./messages:/app/messages
+       - ./news:/app/news
+       - ./notifications:/app/notifications
+       - ./posts:/app/posts
+       - ./salarium:/app/salarium
+       - ./shop:/app/shop
+       - ./slider:/app/slider
+       - ./tags:/app/tags
+       - ./settings:/app/settings
+       - ./chat:/app/chat
+       - ./entrypoint-worker.sh:/app/entrypoint-worker.sh
+       - ./entrypoint-interface.sh:/app/entrypoint-interface.sh
+    environment:
+      - DJANGO_DEBUG=true
+      - DJANGO_SECRET_KEY
+    depends_on:
+      - db
+      - redis
+    command: bash -c "ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &&
+      echo $TZ > /etc/timezone && grunt; python manage.py makemigrations; python manage.py migrate; python manage.py loaddata init_data.json; python set_utf_collation.py; python manage.py runserver 0.0.0.0:8000"

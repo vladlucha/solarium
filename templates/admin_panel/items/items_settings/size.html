@@ -1,0 +1,24 @@
+
+<li id="size-item-{{ size.pk }}">
+    <script>
+        $(document).ready(function() {
+            $('#size-item-{{ size.pk }}-{{ size_group.pk }}').editable({
+                mode: 'inline',
+                ajaxOptions: {
+                    type: 'POST'
+                }
+            });
+        });
+    </script>
+    <div class="size-item">
+        <a href="#" id="size-item-{{ size.pk }}-{{ size_group.pk }}" data-type="text" data-pk="{{ size.pk }}" data-name="name" data-params="{csrfmiddlewaretoken: '{{csrf_token}}', mode: 'update', type: 'size' }" data-url="{% url 'create_size' size_group_id=size_group.pk %}" data-title="Enter size name..">{{ size.name }}</a>
+{#        <a class="pull-right btn btn-default btn-xs" onclick="deleteSize('size-item-{{ size.pk }}', 'size-item-{{ size.pk }}', 'delete', 'size')"><i class=" text-danger fa fa-times" aria-hidden="true"></i></a>#}
+        <form action="{% url 'delete_size' %}" method="POST" hidden>
+            {% csrf_token %}
+            <input type="hidden" name="pk" value="{{ size.pk }}"/>
+            <input type="hidden" name="size_page" value="{{ size_page }}"/>
+            <input type="hidden" name="material_page" value="{{ material_page }}"/>
+        </form>
+        <a class="pull-right btn btn-default btn-xs" onclick="$(this).parent().find('form').submit()"><i class=" text-danger fa fa-times" aria-hidden="true"></i></a>
+    </div>
+</li>

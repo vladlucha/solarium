@@ -1,0 +1,153 @@
+{% load staticfiles %}
+{% load cloudinary %}
+
+<div class="new-brand">
+    <form action="{% url 'create_or_update_item' %}" method="POST" id="new-item-form">
+        {% csrf_token %}
+        {% if item %}
+            <input type="hidden" name="pk" value="{{ item.pk }}">
+        {% endif %}
+        <div class="row">
+
+            <div class="col-xs-4 col-md-3">
+                <label for="brand-thumbnail">Миниатюра:</label>
+                <a onclick="addPostThumbnail('new-item-thumbnail', 'new-item-thumbnail-container')" id="item-thumbnail">
+                    <img src="{% if item.thumbnail.url == none %}{% static 'images/default.png' %}{% else %}{{ item.thumbnail.url }}{% endif %}"
+                         id="new-item-thumbnail" class="new-brand-thumbnail"/>
+                    <input type="hidden" name="thumbnail" id="new-item-thumbnail-container" value="{{ item.thumbnail.pk }}" required>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-9">
+                <label for="brand-banner">Изображения:</label>
+                <div id="item-gallery-container">
+                    {% for image in item.gallery.all %}
+                        <div class="item-image">
+                            <span class="badge badge-important topcorner delete-item"><i class="glyphicon glyphicon-trash"></i></span>
+                            <img src="{{ image.url }}" name="{{ image.pk }}"/>
+                        </div>
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="gallery" id="new-item-images-container" value="{% for image in item.gallery.all %}{{ image.pk }},{% endfor %}">
+            </div>
+        </div>
+        <br>
+
+        <label for="new-brand-name">Название:</label>
+        <input type="text" class="" name="name" id="new-item-name" placeholder="..." value="{{ item.name }}" required><br>
+
+        <label for="new-brand-name">Цена:</label>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="input-group">
+                    <span class="input-group-addon">R</span>
+                    <input type="text" class="" name="price" aria-label="Amount (to the nearest dollar)" value="{{ item.price }}" required>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="input-group hidden">
+                    <span class="input-group-addon">$</span>
+                    <input type="text" class="" name="us_price" aria-label="Amount (to the nearest dollar)" value="{{ item.us_price }}">
+                </div>
+            </div>
+        </div>
+
+        <label for="brand-description">Описание:</label>
+        <textarea id="item-description" name="description" class="" rows="11">{{ item.description }}</textarea><br>
+
+        <label for="new-brand-country">Страна производитель:</label>
+        <input type="text" class="" name="country" id="new-brand-country" placeholder="..." value="{{ item.manufacturer_country }}" required><br>
+
+        <label for="tags">Тэги:</label><br>
+        <input type="text" name="tags" class="" id="tags-input"
+           placeholder="" value="{% for tag in item.tags.all %}{{ tag.tag_text }},{% endfor %}">
+
+        <input type="hidden" value="{% for tag in tags %}{{ tag.tag_text }},{% endfor %}" id="all-tags"><br><br>
+
+        <div class="row">
+            <div class="col-md-2">
+                <label for="size_group">Размер:</label><br>
+                <select class="selectpicker" name="size-group" id="size-group" data-live-search="true" required>
+                    {% for size_group in size_groups %}
+                        {% if size_group.sizes.all|length > 0 %}
+                            <option {% for item_count in item.items_count.all %}{% if item_count.size in size_group.sizes.all %}selected{% endif %}{% endfor %} value="{{ size_group.pk }}">{{ size_group.name }}</option>
+                        {% endif %}
+                    {% empty %}
+                        <option disabled>Нет размеров</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <br>
+                {% for size_group in size_groups %}
+                    <div id="size-group-{{ size_group.pk }}" class="hidden size-item">
+                        {% for size in size_group.sizes.all %}
+                            <label>{{ size.name }}</label>
+                            <div id="size-group-{{ size_group.pk }}" class="input-group">
+                                <span class="input-group-addon">
+                                    <input hidden type="checkbox" id="checkbox-{{ size_group.pk }}-{{ forloop.counter }}" class="checkbox" name="{{ size_group.pk }}-{{ size.pk }}" {% if size.pk in sizes_count_map.keys %}checked{% endif %}>
+                                    <label for="checkbox-{{ size_group.pk }}-{{ forloop.counter }}"></label>
+                                </span>
+                                <input type="number" class="" placeholder="В наличии" name="{{ size_group.pk }}-{{ size.pk }}-value"
+                                {% for key, value in sizes_count_map.items %}{% if key == size.pk %}value="{{ value }}"{% endif %}{% endfor %}>
+                            </div>
+                        {% endfor %}
+                     </div>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-2">
+                <label for="materials">Материалы:</label><br>
+                <select class="selectpicker" name="materials" id="materials" multiple data-live-search="true" data-selected-text-format="count > 3" required>
+                    {% for material in materials %}
+                        <option {% if material in item.materials.all %}selected{% endif %} value="{{ material.pk }}">{{ material.name }}</option>
+                    {% empty %}
+                        <option disabled>Нет материалов</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="sales">Скидки:</label><br>
+                <select class="selectpicker" name="sales" id="sales" multiple data-live-search="true" data-selected-text-format="count > 3">
+                    {% for sale in sales %}
+                        <option {% if sale in item.sales.all %}selected{% endif %} value="{{ sale.pk }}" data-subtext="{{ sale.rate }}%">{{ sale.name }}</option>
+                    {% empty %}
+                        <option disabled>Нет скидок</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="sales">Категории:</label><br>
+                <select class="selectpicker" name="categories" id="categories" multiple data-live-search="true" data-selected-text-format="count > 3">
+                    {% for category in categories %}
+                        <option {% if category in item.categories.all %}selected{% endif %} value="{{ category.pk }}">{{ category.name }}</option>
+                    {% empty %}
+                        <option disabled>Нет категорий</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="brand">Бренды:</label><br>
+                <select class="selectpicker" name="brand" id="brand" data-live-search="true">
+                    {% for brand in brands %}
+                        <option {% if brand == item.brand %}selected{% endif %} value="{{ brand.pk }}">{{ brand.name }}</option>
+                    {% empty %}
+                        <option disabled>Нет брендов</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="item_types">Типы товара:</label><br>
+                <select class="selectpicker" name="item_types" id="item_types" multiple data-live-search="true">
+                    {% for item_type in items_types %}
+                        <option {% if item_type in item.types.all %}selected{% endif %} value="{{ item_type.pk }}">{{ item_type.name }}</option>
+                    {% empty %}
+                        <option disabled>Нет типов товара</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </form>
+</div>

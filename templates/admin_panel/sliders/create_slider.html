@@ -1,0 +1,63 @@
+{% load staticfiles %}
+<form action="{% url 'create_or_update_slide' %}" method="POST" id="new-slider-form-{{ slide.pk }}">
+    {% csrf_token %}
+    {% if slide %}
+        <input type="hidden" name="pk" value="{{ slide.pk }}">
+    {% endif %}
+    <div class="row">
+        <div class="col-xs-8">
+            <div class="form-group">
+                <label for="new-brand-name">Заголовок:</label>
+                <input type="text" class="" name="title" id="new-item-name" placeholder="Заголовок.."
+                       value="{{ slide.title|get }}" required><br>
+            </div>
+
+            <div class="form-group">
+                <label for="new-slide-href">Ссылка:</label>
+                <input type="text" class="" name="href" id="new-slide-href" placeholder="Ссылка.."
+                       value="{{ slide.href|get }}" required><br>
+            </div>
+
+            <div class="form-group">
+                <label for="new-brand-name">Описание:</label>
+                <textarea class="" name="description" placeholder="Описание.."
+                          required>{{ slide.description|get }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="new-brand-name">Порядок:</label>
+                <select name="order" class="form-control">
+                    {% for slide in slides %}
+                        <option {% if forloop.counter0 == slide.order %}selected{% endif %}
+                                value="{{ forloop.counter0 }}">{{ forloop.counter }}</option>
+                    {% endfor %}
+                    <option {% if slides|length == slide.order %}selected{% endif %} value="{{ slides|length }}">{{ slides|length|add:"1" }}</option>
+
+                    {% if slide.order > slides|length %}
+                        <option selected value="{{ slide.order }}">{{ slide.order|add:"1" }}</option>
+                    {% endif %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" {% if slide.is_active %}checked{% endif %} hidden id="new-slider-is-active-{{ slide.pk }}"
+                       name="is_active">
+                <label for="new-slider-is-active-{{ slide.pk }}">Активен</label>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <label for="brand-thumbnail">Изображение:</label>
+            <a onclick="addPostThumbnail('new-item-thumbnail-{{ slide.pk }}', 'new-item-thumbnail-container-{{ slide.pk }}')" id="item-thumbnail">
+                <img src="{% if slide.thumbnail %}{{ slide.thumbnail.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
+                     id="new-item-thumbnail-{{ slide.pk }}" class="new-brand-thumbnail"/>
+                <input type="hidden" name="thumbnail" id="new-item-thumbnail-container-{{ slide.pk }}" value="{{ slide.thumbnail.pk }}" required>
+            </a>
+        </div>
+    </div>
+    <br>
+    {% if not slide %}
+        <div class="row">
+            <div class="col-xs-12 text-center"><a class="btn btn-primary btn-lg" onclick="validateForm('new-slider-form-{{ slide.pk }}')">Добавить слайд</a></div>
+        </div>
+    {% endif %}
+</form>

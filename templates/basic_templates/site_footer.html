@@ -1,0 +1,46 @@
+{% load staticfiles %}
+{% load lazysignup_tags %}
+
+<footer id="footer" class="footer">
+{% if not request.session.include_in_email_delivery %}
+    <div class="footer-newsletter footline">
+        <div class="container">
+            <div class="footer-newsletter-wrap">
+                <h3>Рассылка новостей</h3>
+                <form class="mailchimp-form" id="addEmailRecipientForm" action="{% url 'add_to_rss' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mailchimp-form-content clearfix">
+                        {% if request.user|is_lazy_user %}
+                            <input type="email" id="subscribe_email" class="" required="required" placeholder="введите свой email" name="email">
+                        {% endif %}
+                        <a onclick="validateForm('addEmailRecipientForm')"><button class="btn mailchimp-submit" >Подписаться</button></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endif %}
+<div class="social {% if request.session.include_in_email_delivery %}footline{% endif %}">
+    <br>
+    <div class="container">
+        <ul class="soc">
+            <li><a href="https://vk.com/salarium" target="_blank"><i class="fa fa-vk" aria-hidden="true"></i></a></li>
+            <li><a href="https://www.instagram.com/salarium" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+            <li><a href="https://twitter.com/salariumby" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+        </ul>
+    </div>
+</div>
+<div class="downFooter">
+    <div class="container">
+        <div class="footer-copyright text-left col-md-6 col-sm-6 col-xs-6">
+            <p>salarium street wear / 2017</p>
+        </div>
+        <div class="footer-copyright text-right col-md-6 col-sm-6 col-xs-6">
+            <ul>
+                <li class="footerLink"> <a href="#">РЕКВИЗИТЫ И ГАРАНТИИ</a> </li>
+                <li class="footerLink"><a href="#">УСЛОВИЯ </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</footer>

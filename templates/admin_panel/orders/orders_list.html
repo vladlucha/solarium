@@ -1,0 +1,22 @@
+{% load staticfiles %}
+
+{% include 'admin_panel/after_redirect_notifications.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12"><h3>Заказы</h3></div>
+    </div>
+    <ul class="nav nav-tabs" role="tablist">
+        {% for status in statuses %}
+        <li role="presentation" class="{% if status.value == selected_status %}active{% endif %}"><a href="{% url 'admin_orders' order_status=status.value %}">{{ status.translate }}({{ count|get_from_dict:status.value }})</a></li>
+        {% endfor %}
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content material-shadow">
+        <div role="tabpanel" class="tab-pane active" id="new">
+            {% include 'admin_panel/orders/transactions.html' %}
+            {% include 'admin_panel/no_data_message.html' with data=transactions message='Заказов еще нет' %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,110 @@
+{% load staticfiles %}
+
+<div id="wrapper" class="wide-wrap">
+    {% if header_data %}
+        <div class="parallax row hidden-sm hidden-xs">
+            <div class="col-xs-7">
+                <img src="{{ header_data.thumbnail.url }}">
+            </div>
+            <div class="shop-heading-wrapper">
+                <div class="shop-heading-container">
+                    <div class="title">
+                        <p>{{ header_data.title|get }}</p>
+                        <p class="title2"><span>{{ header_data.description|get }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="heading-container">
+        <div class="container heading-standar">
+            <div class="page-breadcrumb">
+                <ul class="breadcrumb">
+
+                    {% for brand in brands %}
+                        {% if brand.pk in selected_brands %}
+                            <li><a href="?brands={{ brand.pk }}"><span>{{ brand.name }}</span></a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% for category in categories %}
+                        {% if category.pk in selected_categories %}
+                            <li><a href="?categories={{ category.pk }}"><span>{{ category.name }}</span></a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-container commerce page-layout-left-sidebar shop-page">
+        <div class="container">
+            <div class="row">
+
+                <!--filters-->
+                {% include 'site/shop_filters.html' %}
+
+
+                <!--content-->
+                <div class="col-md-9 col-sm-8 col-xs-12 main-wrap shop-page-content">
+                    <div class="main-content">
+
+                        <div class="shop-loop grid">
+                            <ul class="products">
+                                {% for product in items %}
+                                    <li class="product col-md-3 col-sm-6"><a
+                                            href="{% url 'get_item' item_slug=product.slug %}">
+                                        <div class="product-container">
+                                            <figure>
+                                                <div class="product-wrap">
+                                                    <div class="product-images">
+                                                        <div class="shop-loop-thumbnail shop-loop-front-thumbnail">
+                                                            <img class="main-page-item-thumbnail" width="375"
+                                                                 height="505"
+                                                                 style="background-image: url('{{ product.thumbnail.url }}')"
+                                                                 alt=""/>
+                                                        </div>
+                                                        <div class="shop-loop-thumbnail shop-loop-back-thumbnail">
+                                                            <img class="main-page-item-thumbnail" width="375"
+                                                                 height="505"
+                                                                 style="background-image: url('{{ product.thumbnail.url }}')"
+                                                                 alt=""/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <figcaption>
+                                                    <div class="shop-loop-product-info">
+                                                        <div class="info-content-wrap">
+                                                            <h3 class="product_title">
+                                                                <a href="{% url 'get_item' item_slug=product.slug %}"
+                                                                   style="text-transform: uppercase">{{ product.name }}</a>
+
+                                                            </h3>
+                                                            <p class="product">
+                                                                {% if product.price == product.item_price %}{{ product.price }}  руб.{% endif %}
+                                                                {% if product.price != product.item_price %}<span>{{ product.price }}  руб.</span>{{ product.item_price|floatformat:2 }} руб.{% endif %}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </figcaption>
+                                            </figure>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+
+                            </ul>
+                            {% include 'admin_panel/no_data_message.html' with data=items message='Ничего не найдено...' %}
+                        </div>
+                        {% include 'admin_panel/pagination.html' with objects=items route='shop' page=shop_page num_pages=number_shop_pages %}
+
+                    </div>
+                </div>
+                <!--filter-->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'basic_templates/contact_info.html' %}

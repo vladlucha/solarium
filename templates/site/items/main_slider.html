@@ -1,0 +1,30 @@
+{% load staticfiles %}
+{% if slides %}
+    <div class="heading-container heading-resize heading-button">
+        <div class="heading-background heading-parallax">
+            <div id="slide-image-container" class="main-slide-img-container" data-href="{{ slides.0.href }}" style="background-image: url({{ slides.0.thumbnail.url }}); "></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="heading-wrap">
+                            <div class="page-title">
+                                {% for slide in slides %}
+                                    <span data-href="{{ slide.href }}" data-img="{{ slide.thumbnail.url }}" data-index="{{ forloop.counter }}" id="{{ forloop.counter }}" class="{% if forloop.counter0 == 0 %}selected-slide{% endif %}">
+                                        <a onclick="changeMainSlide($(this).parent())" class="slide-title {% if forloop.counter0 == 0 %}hactive{% endif %}">{{ slide.title }}</a>
+    {#                                    <div class="linetitle hidden-sm hidden-xs" {% if forloop.counter0 > 0 %}style="display: none"{% endif %}></div>#}
+                                        <span class="subtitle" {% if forloop.counter0 > 0 %}style="display: none"{% endif %}>{{ slide.description }}</span>
+                                    </span>
+                                {% endfor %}
+                                <div id="circle" class="hidden-sm hidden-xs"></div>
+                                <div class="downarrow hidden-sm hidden-xs">
+                                    <a id="slider-scroll-down"><img src="{% static 'salarium/img/down.png' %}"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="slides-count" data-count="{{ slides|length}}" class="hidden"></div>
+{% endif %}

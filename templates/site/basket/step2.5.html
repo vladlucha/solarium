@@ -1,0 +1,56 @@
+{% load mathfilters %}
+<div class="slide" data-anchor="slide3">
+    <div class="normal-scroll">
+        <div class="container">
+            <div class="row text-center" style="margin-bottom: 10px; padding: 5px">
+                <div class="col-xs-4">
+                    <div id="paymentForm"></div>
+                </div>
+                <div class="col-xs-8">
+                    <h2>Товары:</h2>
+                    <hr/>
+                    <div class="row basket-items">
+                        <div class="col-xs-12">
+                            {% for order in orders %}
+                                <div class='order_item' id="{{ forloop.counter }}" style="position: inherit; display: block;" data-order_uuid="{{ order.uuid }}">
+                                    <span class="no-decorations">
+                                        {% include 'site/items/order.html' with nonedit=True %}
+                                    </span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 text-left">
+                            <h3>Итого:</h3>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            {% if 'promocode' in request.session and request.session.promocode.value %}
+                                <h4>
+                                    Промокод: {{ request.session.promocode.code }} {{ request.session.promocode.value|mul:100 }}%
+                                </h4>
+                                <h4>
+                                    <b>
+                                        <span style="text-decoration:line-through">
+                                            <span class="total-price">{{ total_price|floatformat:2 }}</span> руб.
+                                        </span> / <span class="discount-price">{{ discount_price|floatformat:2 }}</span> руб.
+                                    </b>
+                                </h4>
+                                <span>
+                                    скидка
+                                    <span class="total-discount">{{ total_discount|floatformat:2 }}</span> руб.
+                                </span>
+                            {% else %}
+                                <h4>
+                                    <b>
+                                        <span class="total-price">{{ total_price|floatformat:2 }}</span> руб.
+                                    </b>
+                                </h4>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

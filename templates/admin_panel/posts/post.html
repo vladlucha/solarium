@@ -1,0 +1,46 @@
+{% if request.session.view_type == 'list' %}
+    <hr/>
+    <div class="row brand-item">
+        <div class="col-md-2">
+            <a href="{% url 'create_post' post_id=post.id %}">
+                <img class="img-responsive" src="{{ post.thumbnail.url }}">
+            </a>
+        </div>
+        <div class="col-md-6">
+            <p>
+                <a href="{% url 'create_post' post_id=post.id %}">
+                    <h4>{{ post.title }}</h4>
+                </a>
+            </p>
+            <div class="post-excerpt excerpt">{{ post.excerpt }}</div>
+        </div>
+        <div class="col-md-2 text-center">
+            <strong class="status {{ post.status }}">{{ post.status }}</strong>
+        </div>
+        <div class="col-md-2 text-center">
+            {{ post.author.username }}
+        </div>
+    </div>
+{% elif request.session.view_type == 'items' %}
+    <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">
+        <div class="item-card material-shadow">
+            <a href="{% url 'create_post' post_id=post.id %}">
+                <div class="item-thumbnail">
+                    <img class="img-responsive" src="{{ post.thumbnail.url }}">
+                </div>
+            </a>
+            <h4>
+                <a href="{% url 'create_post' post_id=post.id %}">{{ post.title }}</a>
+            </h4>
+            <div class="description">{{ post.excerpt }}</div>
+            <span class="bottom">
+                <p>
+                    by: <a href="#">{{ post.author.username }}</a>
+                </p>
+                <p>
+                    <small class="status {{ brand.status.name }}">{{ brand.status.name }}</small>
+                </p>
+            </span>
+        </div>
+    </div>
+{% endif %}

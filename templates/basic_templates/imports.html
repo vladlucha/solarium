@@ -1,0 +1,88 @@
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+      rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic'
+      rel='stylesheet' type='text/css'>
+
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+{% load staticfiles %}
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<link rel="stylesheet" href="{% static 'build/_bower.css' %}">
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'salarium/css/hover-effect-3.css' %}">
+
+
+<link rel='stylesheet' href='{% static 'salarium/css/swatches-and-photos.css' %}' type='text/css' media='all'/>
+<link rel='stylesheet' href='{% static 'salarium/css/prettyPhoto.css' %}' type='text/css' media='all'/>
+<link rel='stylesheet' href='{% static 'salarium/css/jquery.selectBox.css' %}' type='text/css' media='all'/>
+<link rel='stylesheet' href='{% static 'salarium/css/elegant-icon.css' %}' type='text/css' media='all'/>
+<link rel='stylesheet' href='{% static 'salarium/css/style.css' %}' type='text/css' media='all'/>
+<link rel='stylesheet' href='{% static 'salarium/css/commerce.css' %}' type='text/css' media='all'/>
+<link rel='stylesheet' href='{% static 'salarium/css/custom.css' %}' type='text/css' media='all'/>
+<link rel='stylesheet' href='{% static 'salarium/css/reset.css' %}' type='text/css' media='all'/>
+<link rel='stylesheet' href='{% static 'salarium/css/magnific-popup.css' %}' type='text/css' media='all'/>
+<link rel='stylesheet' href='{% static 'salarium/css/fonts.css' %}' type='text/css' media='all'/>
+
+<link rel='stylesheet' href='{% static 'salarium/css/chatbox/normalize.css' %}' type='text/css' media='all'/>
+<link rel='stylesheet' href='{% static 'salarium/css/chatbox/style.css' %}' type='text/css' media='all'/>
+<link rel='stylesheet' href='{% static 'salarium/css/fullpage-chat/style.css' %}' type='text/css' media='all'/>
+
+<link rel="stylesheet" href="{% static 'salarium/css/material-icons.css' %}">
+<link rel="stylesheet" href="{% static 'salarium/css/salarium.css' %}">
+
+<script type="text/javascript" src="https://js.bepaid.by/begateway-1-latest.min.js"></script>
+
+<script src="{% static 'build/_bower.js' %}"></script>
+<script type='text/javascript' src='{% static 'salarium/js/vendor/jquery.interactive_bg.js' %}'></script>
+<script src="{% static 'salarium/js/salarium.js' %}"></script>
+
+<script>
+    function initInteractiveBg(elem){
+        elem.interactive_bg({
+            strength: 45,              // Movement Strength when the cursor is moved. The higher, the faster it will reacts to your cursor. The default value is 25.
+            scale: 1.02,               // The scale in which the background will be zoomed when hovering. Change this to 1 to stop scaling. The default value is 1.05.
+            animationSpeed: "150ms",   // The time it takes for the scale to animate. This accepts CSS3 time function such as "100ms", "2.5s", etc. The default value is "100ms".
+            contain: true,             // This option will prevent the scaled object/background from spilling out of its container. Keep this true for interactive background. Set it to false if you want to make an interactive object instead of a background. The default value is true.
+            wrapContent: false         // This option let you choose whether you want everything inside to reacts to your cursor, or just the background. Toggle it to true to have every elements inside reacts the same way. The default value is false
+        });
+    }
+
+    $(document).ready(function () {
+        $("div.photoblog:not('div.container div.photoblog')").each(function(){
+            var src = $(this).data('ibg-bg');
+            var bgInteractive = $(this);
+            var bgImage = new Image();
+            bgImage.src = src;
+            bgImage.onload = function() {
+                bgInteractive.hide();
+                bgInteractive.css({
+                    'height': Math.min(bgImage.height, window.innerHeight - 200) + 'px'
+                });
+                initInteractiveBg(bgInteractive);
+
+                bgInteractive.fadeIn(3000);
+            };
+        });
+
+
+    });
+
+    $(window).resize(function () {
+        $(".wrapper > .ibg-bg").css({
+            width: $(window).outerWidth(),
+            height: $(window).outerHeight()
+        })
+    })
+
+</script>
+
+

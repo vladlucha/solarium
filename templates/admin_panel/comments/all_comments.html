@@ -1,0 +1,31 @@
+{% load staticfiles %}
+<script src="{% static 'salarium/js/admin_comments.js' %}"></script>
+
+{% include 'admin_panel/after_redirect_notifications.html' %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12"><h3>Комментарии</h3></div>
+    </div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="{{ active_types.new }}"><a href="#new" aria-controls="new" role="tab" data-toggle="tab">Новые</a></li>
+        <li role="presentation" class="{{ active_types.updated }}"><a href="#updated" aria-controls="updated" role="tab" data-toggle="tab">Отредактированные</a></li>
+        <li role="presentation" class="{{ active_types.viewed }}"><a href="#viewed" aria-controls="viewed" role="tab" data-toggle="tab">Промодерированные</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content material-shadow">
+        <div role="tabpanel" class="tab-pane active" id="new">
+            {% include 'admin_panel/comments/partitions.html' with comments=new_comments has_more=has_more_new type='new' %}
+            {% include 'admin_panel/no_data_message.html' with data=new_comments message='Новых комментариев нет' %}
+        </div>
+        <div role="tabpanel" class="tab-pane" id="updated">
+            {% include 'admin_panel/comments/partitions.html' with comments=updated_comments has_more=has_more_updated type='updated' %}
+            {% include 'admin_panel/no_data_message.html' with data=updated_comments message='Недавно отредактированых комментариев нет' %}
+        </div>
+        <div role="tabpanel" class="tab-pane" id="viewed">
+            {% include 'admin_panel/comments/partitions.html' with comments=viewed_comments has_more=has_more_viewed type='viewed' %}
+            {% include 'admin_panel/no_data_message.html' with data=viewed_comments message='Комментариев прошедших модерацию еще нет' %}
+        </div>
+    </div>
+</div>

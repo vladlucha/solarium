@@ -1,0 +1,39 @@
+{% load staticfiles %}
+
+<script type="text/javascript" src="{% static 'salarium/js/basket.js' %}"></script>
+
+{% if orders|length > 0 or step != none %}
+    <div id="fullpageBasket">
+        <div class="section active">
+            {% include 'site/basket/checkout_heading.html' %}
+
+            {% if not step or step == 'slide1' %}
+                {% include 'site/basket/step1.html' %}
+            {% endif %}
+
+            {% if not step or step == 'slide2' %}
+                {% include 'site/basket/step2.html' %}
+            {% endif %}
+
+            {% if not step or step == 'slide3' %}
+                {% include 'site/basket/step2.5.html' %}
+            {% endif %}
+
+            {% if not step or step == 'slide4' %}
+                {% include 'site/basket/step3.html' %}
+            {% endif %}
+
+        </div>
+    </div>
+{% endif %}
+<div class="container">
+    <div class="row" id="basket-empty-state" {% if orders|length > 0 or step != none %}style="display: none"{% endif %}>
+        <div class="col-xs-12 text-center">
+            <div style="padding-top: 20%; padding-bottom: 20%" class="text-muted">
+                <h1>В данный момент у вас нет товаров в корзине.</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'basic_templates/contact_info.html' %}

@@ -1,0 +1,57 @@
+{% load staticfiles %}
+{% load lazysignup_tags %}
+
+{% include 'admin_panel/after_redirect_notifications.html' %}
+<script src="{% static 'salarium/js/chat.js' %}"></script>
+
+<br>
+<div class="row">
+    <div class="col-xs-12"><h3>Чаты с пользователями</h3></div>
+</div>
+
+<div class=row>
+    <div class="col-xs-12">
+
+        <div class='chatbox-container'>
+            <div class='chatbox'>
+                <div class='chatbox__user-list'>
+                    <h5>Пользователи</h5>
+                    {% for user in users %}
+                        <div id="user-preview-{{ user.pk }}" data-user-pk="{{ user.pk }}" class='user-toggle {% if forloop.counter <= 1 %}active{% endif %} {% if user.is_online %}chatbox__user--active{% else %}chatbox__user--away{% endif %}'>
+                            <p>{{ user.username }} &nbsp;<span class="badge badge-success hidden">new</span></p>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% for user in users %}
+                    {% include 'site/items/full_page_chat.html' with messages=user.messages %}
+
+                    <script>
+                        new Chat({{ request.user.pk }}, {{ user.pk }});
+                    </script>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if users|length == 0 %}
+            <div class="text-center text-muted"><h3>Сообщений еще нет</h3></div>
+        {% endif %}
+
+        <br>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('.user-toggle').on('click', function(){
+            var user_pk = $(this).data('user-pk');
+            $('.chatbox__messages__container:not(.hidden)').addClass('hidden');
+            $(`.user-toggle.active`).removeClass('active');
+
+            $(`#user-preview-${user_pk}`).addClass('active');
+            $(`#user-messages-${user_pk}`).removeClass('hidden');
+
+            setTimeout(function(){ $(`#user-preview-${user_pk} .badge`).addClass('hidden'); }, 1500);
+        });
+    });
+</script>

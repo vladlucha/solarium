@@ -1,0 +1,96 @@
+{% load staticfiles %}
+{% load lazysignup_tags %}
+
+<style>
+    #hero{
+      background-size:cover;
+      position:relative;
+      height:100vh;
+    }
+
+    .header{
+      position:absolute;
+      top:50%;
+      text-align:center;
+      width:100%;
+      color:#fff;
+      font-size:36px;
+      -ms-transform: translate(0,-50%); /* IE 9 */
+        -webkit-transform: translate(0,-50%); /* Safari */
+        transform: translate(0,-50%);
+
+    }
+</style>
+
+<script type="text/javascript" src="{% static 'salarium/js/index.js' %}"></script>
+
+<div id="hero">
+    <div class="container-fluid" style="height: 100%">
+        <div class="row" style="height: 100%">
+            <div class="col-xs-6" style="height: 100%; background-color: #e8e8e8"></div>
+            <div class="col-xs-6" style="height: 100%; background-color: #b9b9b9"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <span class="main-page section-title">Новые товары</span>
+            <br><br>
+            <div class="row">
+                {% include 'UI_elements/main_page_items.html' %}
+            </div>
+        </div>
+    </div>
+    <hr class="main-hr"/>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <span class="main-page section-title">Новое из блога</span>
+            <br><br>
+            <div class="row">
+                {% include 'UI_elements/main-page-posts.html' %}
+            </div>
+        </div>
+    </div>
+    <hr class="main-hr"/>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <span class="main-page section-title">Контакты</span>
+            <br><br>
+            <div class="row" style="position: relative">
+                {% include 'UI_elements/contacts.html' %}
+            </div>
+        </div>
+    </div>
+    <hr class="main-hr"/>
+</div>
+{% if request.user|is_lazy_user or not request.user.include_in_email_delivery %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <span class="main-page section-title">Рассылка новостей</span>
+            </div>
+            <br>
+            <br>
+            <br>
+
+            {% if request.user|is_lazy_user %}
+            <div class="col-xs-4 col-xs-offset-2 text-right"><input class="" placeholder="Введите свой E-mail"></div>
+            <div class="col-xs-4 text-left"><a class="btn btn-default">ПОДПИСАТЬСЯ</a></div>
+            {% elif not request.user.include_in_email_delivery %}
+                <div class="col-xs-12 text-center"><a class="btn btn-default btn-lg">ПОДПИСАТЬСЯ</a></div>
+            {% endif %}
+        </div>
+        <hr class="main-hr"/>
+    </div>
+{% endif %}
+
+

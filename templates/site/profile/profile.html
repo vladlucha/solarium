@@ -1,0 +1,167 @@
+{% load staticfiles %}
+
+{% include 'admin_panel/after_redirect_notifications.html' %}
+<script src="{% static 'salarium/js/profile.js' %}"></script>
+<!-- Page Content -->
+<div class="container">
+    <br><br>
+    <form id="profile-form" method="POST" action="{% url 'save_profile' %}">
+        {% csrf_token %}
+        {% include 'site/profile/profile_avatar.html' %}
+        <div class="row comments">
+
+            <div class="col-xs-3">
+                {% include 'site/profile/profile_menu.html' %}
+            </div>
+
+            <!-- Blog Post Content Column -->
+
+            <div class="col-xs-9 profile-data-container">
+                <div class="form-group row required">
+                    <div class="col-xs-3">
+                        <label for="username1">Ник</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <input id="username1" name="username" value="{{ user.username|get }}" required>
+                    </div>
+                </div>
+                <div class="form-group row required">
+                    <div class="col-xs-3">
+                        <label for="email">E-mail</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <input type="email" id="email" name="purchaser_email"
+                               value="{{ user.email|get }}" required>
+                    </div>
+                </div>
+                <div class="form-group row required">
+                    <div class="col-xs-3">
+                        <label for="password">Текущий пароль</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <input type="password" id="password" name="password">
+                    </div>
+                </div>
+                <div class="form-group row required">
+                    <div class="col-xs-3">
+                        <label for="new_password">Новый пароль</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <input type="password" id="new_password" name="new_password">
+                    </div>
+                </div>
+                <div class="form-group row required">
+                    <div class="col-xs-3">
+                        <label for="new_password_approve">Подтверждение</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <input type="password" id="new_password_approve" name="new_password_approve">
+                    </div>
+                </div>
+
+                <div class="basket container profile-title">
+                    <div class=row>
+                        <h3 class="col-sm-12">Реквизиты оплаты</h3>
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <div class="col-xs-3">
+                        <label for="name">Имя</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <input id="name" name="purchaser_name"
+                               value="{{ user.name|get }}" required>
+                    </div>
+                </div>
+                <div class="form-group row required">
+                    <div class="col-xs-3">
+                        <label for="surname">Фамилия</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <input id="surname" name="purchaser_surname"
+                               value="{{ user.surname|get }}">
+                    </div>
+                </div>
+                <div class="form-group row required">
+                    <div class="col-xs-3">
+                        <label for="patronymic">Отчество</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <input id="patronymic" name="purchaser_patronymic"
+                               value="{{ user.patronymic|get }}">
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <div class="col-xs-3">
+                        <label for="address">Адрес</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <div class="row">
+                            <div class="form-group col-xs-12 required">
+                                <input id="address" name="address"
+                                       placeholder="Страна, город, улица"
+                                       value="{{ user.address|get }}">
+                            </div>
+                            <div class="form-group col-xs-4 required">
+                                <input type="number" id="house" name="house" placeholder="Дом"
+                                       value="{{ user.house|get }}">
+                            </div>
+                            <div class="form-group col-xs-4 required">
+                                <input type="number" id="housing_number" name="housing_number" placeholder="Корпус"
+
+                                       value="{{ user.housing_number|get }}">
+                            </div>
+                            <div class="form-group col-xs-4 required">
+                                <input type="number" id="flat_number" name="flat_number" placeholder="Квартира"
+
+                                       value="{{ user.flat_number|get }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <div class="col-xs-3">
+                        <label for="post_index">Индекс</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <input id="post_index" name="post_index"
+                               value="{{ user.post_index|get }}">
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <div class="col-xs-3">
+                        <label for="phone_number">Телефон</label>
+                    </div>
+                    <div class="col-xs-9">
+                        <input id="phone_number" name="purchaser_phone_number"
+                               value="{{ user.phone_number|get }}" placeholder="+375 (__) ___ __ __">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <span class="mailchimp-form">
+                <div class="mailchimp-form-content clearfix">
+                    <button onclick="validateForm('profile-form')" class="btn mailchimp-submit"
+                            style="width: 30%; margin-top: 40px">
+                        Сохранить изменения
+                    </button>
+                </div>
+            </span>
+        </div>
+    </div>
+
+
+</div>
+
+<br><br><br>
+{% include 'basic_templates/contact_info.html' %}

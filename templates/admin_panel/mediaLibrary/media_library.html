@@ -1,0 +1,16 @@
+{% load staticfiles %}
+
+<div id="mediaLibrary">
+    <div class="row">
+        <div class="col-xs-6 text-left"><h2>Медиа файлы</h2></div>
+        <div class="col-xs-6 text-right">
+            <br>
+            <a class="btn btn-danger btm-md" id="delete-media">Удалить</a>
+            <a class="btn btn-primary btm-md" id="upload-media">Загрузить</a>
+        </div>
+    </div>
+    <br>
+    {% include 'admin_panel/mediaLibrary/media_files.html' %}
+</div>
+
+<script src="{% static 'salarium/js/fullMediaLibrary.js' %}"></script>

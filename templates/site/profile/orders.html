@@ -1,0 +1,49 @@
+{% load staticfiles %}
+
+
+
+<script src="{% static 'salarium/js/profile.js' %}"></script>
+<!-- Page Content -->
+<div class="container">
+    <br><br>
+    {% include 'site/profile/profile_avatar.html' %}
+    <div class="row">
+
+        <div class="col-xs-3">
+            {% include 'site/profile/profile_menu.html' %}
+        </div>
+
+        <!-- Blog Post Content Column -->
+        <div class="col-xs-9 profile-data-container responsive-table">
+            <div>
+                {% for transaction in transactions %}
+                    <div class="row transaction-header bottom-border">
+                        <div class="col-xs-6">
+                            <span><b>Заказ <span class="tr-text">№{{ transaction.id }}</span></b></span>
+                            <span class="transaction create-date pull-right tr-text">{{ transaction.created_date }}</span>
+                        </div>
+                        <div class="col-xs-2 text-center left-border tr-text">{{ transaction.status }}</div>
+                        <div class="col-xs-2 text-center left-border tr-text">
+                            {{ transaction|transaction_items_count }} ед.
+                        </div>
+                        <div class="col-xs-2 text-center transaction-price left-border pull-right tr-text">{{ transaction.total_price }} руб.</div>
+                    </div>
+                    {% for order in transaction.orders.all %}
+                        {% include 'site/items/order.html' %}
+                    {% endfor %}
+                    <br>
+                    <br>
+                {% endfor %}
+                {% include 'admin_panel/no_data_message.html' with data=transactions message='Заказов еще нет' %}
+                {% include 'admin_panel/pagination.html' with objects=transactions route='orders' page=transactions_page num_pages=number_transactions_pages input_name='transactions_page' %}
+            </div>
+        </div>
+
+    </div>
+    <!-- /.row -->
+
+</div>
+
+<br><br><br>
+{% include 'basic_templates/contact_info.html' %}
+

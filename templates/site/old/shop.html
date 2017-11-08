@@ -1,0 +1,83 @@
+<br>
+<div class="container-fluid">
+<div class="row">
+    <div class="col-xs-12">
+        <a href="{% url 'shop' %}" class="btn btn-default {% if not active_brand %}active{% endif %}">ВСЕ</a>
+        {% for brand in brands %}
+            <a href="{% url 'get_items' brand=brand.1 category=active_category %}" class="btn btn-default {% if brand.1 == active_brand.slug %}active{% endif %}">{{ brand.0 }}</a>
+        {% endfor %}
+    </div>
+</div>
+{% if active_brand and active_brand.slug != '_' %}
+    <img src="{{ active_brand.banner.url }}" class="brand-items">
+{% endif %}
+<hr/>
+    <div class="row">
+
+        <div class="col-xs-4 col-md-3 col-lg-2 full-height shop-menu">
+            <div class="material-shadow">
+                <h3>Категории</h3>
+                {% for category in categories %}
+                    <a class="btn btn-default full-width {% if active_category == category %}active{% endif %}" href="{% url 'get_items' brand=active_brand.slug category=category %}">{{ category }}</a><br>
+                {% endfor %}
+            </div>
+            <form action="{% url 'get_items' brand=active_brand.slug category=active_category %}" method="POST">
+                <div class="material-shadow">
+                    <h3>Материалы</h3>
+                        {% csrf_token %}
+                        {% for material in materials %}
+                            <input type="checkbox" name="selected_materials" value="{{ material.0 }}" {% if material.0 in selected_materials %}checked{% endif %}> {{ material.0 }}<br>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-default">Найти</button>
+                </div>
+                <div class="material-shadow">
+                    <h3>Стоимость</h3>
+                        {% csrf_token %}
+                        <input id="ex1" data-slider-id='ex1Slider' name="prices" type="text" class="span2" value="" data-slider-min="{{ min_price }}" data-slider-max="{{ max_price }}" data-slider-step="1" data-slider-value="[{{ min_price_value }},{{ max_price_value }}]"/>
+        {#                <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="{{ min_price }}" data-slider-max="{{ max_price }}" data-slider-step="1" data-slider-value="14"/>#}
+                        <button type="submit" class="btn btn-default">Найти</button>
+                </div>
+            </form>
+            <div class="material-shadow">
+                <h3>Теги</h3>
+                <span>
+                    {% for tag in tags %}
+                        {% if tag !=  %}
+                        <a class="tag-href" href="{% url 'get_items_by_tag' tag=tag.strip %}">{{ tag }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+        </div>
+
+        <div class="col-xs-8 col-md-9 col-lg-10" id="items-container">
+        <div class="row">
+            {% if items %}
+                {% include 'UI_elements/main_page_items.html' %}
+            {% endif %}
+        </div>
+
+        {% include 'admin_panel/no_data_message.html' with data=items message='Ничего не найдено...' %}
+
+        </div>
+    </div>
+    {% if number_shop_pages > 2 %}
+    <div class="row">
+        <div class="col-xs-8 col-md-9 col-lg-10 text-center">
+            <a class="btn btn-sm btn-warning" onclick="loadMore($(this), $('#items-container'), '{% url 'get_items_by_page' brand=active_brand.slug category=active_category tag=active_tag %}')">Еще...</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<br><br><br><br>
+
+<script>
+    $(window).ready(function(){
+        $('#ex1').slider({
+            formatter: function(value) {
+                return 'от '+value[0]+' до '+value[1];
+            }
+        });
+    });
+</script>

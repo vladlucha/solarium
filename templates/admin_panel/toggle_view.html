@@ -1,0 +1,6 @@
+{% if different_views %}
+    <span class="pull-right toggle-view" style="font-size:1.5em;">
+        <a href="{% url 'toggle_view' view_type='items' %}"><i class="glyphicon glyphicon-th {% if request.session.view_type != 'items' %}text-muted{% endif %}"></i></a>
+        <a href="{% url 'toggle_view' view_type='list' %}"><i class="glyphicon glyphicon-th-list {% if request.session.view_type != 'list' %}text-muted{% endif %}"></i></a>
+    </span>
+{% endif %}

@@ -1,0 +1,7 @@
+{% for notification in notifications %}
+    <a href="{% url 'get_all_comments' active_type=notification.type %}" class="list-group-item text-left">
+        <span><i class="fa fa-comment fa-fw"></i> {{ notification.name }}</span>
+        <span class="pull-right text-muted small"><em>{{ notification.date_delta }} before</em>
+        </span>
+    </a>
+{% endfor %}

@@ -1,0 +1,33 @@
+{% include 'admin_panel/after_redirect_notifications.html' %}
+<br>
+<div class="row">
+    <div class="col-xs-6 text-left"><h3>Статьи</h3></div>
+    <div class="col-xs-6 text-right" style="padding-top: 20px"><a class="btn btn-md btn-primary" href="{% url 'create_post' post_id=None %}">Добавить статью</a></div>
+</div>
+<br>
+{% if request.session.view_type == 'list' and posts %}
+    <div class="row">
+        <div class="col-md-2  text-center">
+            <b>Миниатюра</b>
+        </div>
+        <div class="col-md-6 ">
+            <b>Заглавие и цитата</b>
+        </div>
+        <div class="col-md-2  text-center">
+            <b>Статус</b>
+        </div>
+        <div class="col-md-2 text-center">
+            <b>Автор</b>
+        </div>
+    </div>
+{% endif %}
+
+<div class=row>
+{% for post in posts %}
+    {% include 'admin_panel/posts/post.html' %}
+{% endfor %}
+</div>
+
+{% include 'admin_panel/no_data_message.html' with data=posts message='Статей еще нету' %}
+{% include 'admin_panel/pagination.html' with objects=posts route='all_posts' page=post_page num_pages=number_post_pages input_name='post_page' %}
+<br><br><br><br>

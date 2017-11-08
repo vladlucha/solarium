@@ -1,0 +1,190 @@
+<div class="slide" data-anchor="slide2">
+    <div class="normal-scroll">
+        <div class="basket container">
+            <div class="row" style="margin-bottom: 10px; padding: 5px">
+
+                <form id="checkout-form" method="POST" action="{% url 'create_transaction' %}" novalidate>
+                    {% csrf_token %}
+                    <div class="row comments">
+                        <div class="col-xs-8" id="delivery-info">
+                            <br>
+
+                            <div class="form-group row required">
+                                <div class="col-xs-3">
+                                    <label for="name">Имя</label>
+                                </div>
+                                <div class="col-xs-9">
+                                    <input id="name" name="purchaser_name"
+                                           value="{{ user.name|get }}"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="form-group row required">
+                                <div class="col-xs-3">
+                                    <label for="surname">Фамилия</label>
+                                </div>
+                                <div class="col-xs-9">
+                                    <input id="surname" name="purchaser_surname"
+                                           value="{{ user.surname|get }}" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-xs-3">
+                                    <label for="patronymic">Отчество</label>
+                                </div>
+                                <div class="col-xs-9">
+                                    <input id="patronymic" name="purchaser_patronymic"
+                                           value="{{ user.patronymic|get }}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row required">
+                                <div class="col-xs-3">
+                                    <label for="address">Адрес</label>
+                                </div>
+                                <div class="col-xs-9">
+                                    <div class="row">
+                                        <div class="form-group col-xs-12 required">
+                                            <input id="address" name="address"
+                                                   placeholder="Страна, улица"
+                                                   value="{{ user.address|get }}" required>
+                                        </div>
+                                        <div class="form-group col-xs-12 required">
+                                            <input id="address" name="city"
+                                                   placeholder="Город"
+                                                   value="{{ user.city|get }}" required>
+                                        </div>
+                                        <div class="form-group col-xs-4 required">
+                                            <input id="house" name="house" placeholder="Дом"
+                                                   value="{{ user.house|get }}" required>
+                                        </div>
+                                        <div class="form-group col-xs-4">
+                                            <input id="housing_number" name="housing_number" placeholder="Корпус"
+                                                   value="{{ user.housing_number|get }}">
+                                        </div>
+                                        <div class="form-group col-xs-4 required">
+                                            <input id="flat_number" name="flat_number" placeholder="Квартира"
+                                                   value="{{ user.flat_number|get }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-xs-3">
+                                    <label for="post_index">Индекс</label>
+                                </div>
+                                <div class="col-xs-9">
+                                    <input id="post_index" name="post_index"
+                                           value="{{ user.post_index|get }}"
+                                            >
+                                </div>
+                            </div>
+
+                            <div class="form-group row required">
+                                <div class="col-xs-3">
+                                    <label for="phone_number">Телефон</label>
+                                </div>
+                                <div class="col-xs-9">
+                                    <input id="phone_number" name="purchaser_phone_number"
+                                           value="{{ user.phone_number|get }}" placeholder="+375 (__) ___ __ __" required>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group row required">
+                                <div class="col-xs-3">
+                                    <label for="email">E-mail</label>
+                                </div>
+                                <div class="col-xs-9">
+                                    <input type="email" id="email" name="purchaser_email"
+                                           value="{{ user.email|get }}" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-xs-3">
+                                    <label for="comment">Примечание</label>
+                                </div>
+                                <div class="col-xs-9">
+                                    <textarea id="comment" name="comment" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4" id="checkout-info" style="text-transform: none">
+                            <br>
+                            <label for="delivery" style="text-transform: uppercase">Способ доставки</label><br>
+                            <div class="form-group row required">
+                                {% for delivery_type in delivery_types %}
+                                    <div class="col-xs-12 delivery_type">
+                                        <input id="delivery_type-{{ forloop.counter }}" type="radio" name="delivery_type" value="{{ delivery_type.value }}" {% if forloop.counter == 1 %}checked{% endif %} hidden/>
+                                        <label class="delivery-type-radio" for="delivery_type-{{ forloop.counter }}"></label>
+                                            <div class="delivery-type-description">
+                                                {{ delivery_type.translate }}
+                                                <span class="text-muted"> {{ delivery_type.additional }}</span>
+                                            </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <br>
+                            <label for="delivery" style="text-transform: uppercase">Способ оплаты</label><br>
+                            <div class="form-group row required">
+                                {% for delivery_type in delivery_types %}
+                                    <div id="delivery-payment-{{ delivery_type.value }}" class="payment-type {% if forloop.counter > 1 %}hidden{% endif %}">
+                                        {% for payment_type in delivery_type.payment_types %}
+                                            <div class="col-xs-12 pay-type">
+                                                <input id="paid_type-{{ payment_type.value }}" type="radio" name="payment_type" value="{{ payment_type.value }}" hidden/>
+                                                <label for="paid_type-{{ payment_type.value }}" class="pay-type-radio"></label>
+                                                <div class="pay-type-description">
+                                                    {{ payment_type.translate }} {% if payment_type == payment_types.COD %}({% post_delivery_cost total_price %}){% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <span class="mailchimp-form">
+                            <div class="mailchimp-form-content clearfix">
+                                <button onclick="validateForm('checkout-form', false, createTransaction)"
+                                        class="btn mailchimp-submit checkout-proceed-btn" style="width: 30%; margin-top: 40px">
+                                    Разместить заказ <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <br>
+                            <br>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('.delivery_type input').on('click', function(){
+            var selectedValue = $(this).val();
+
+            $(`.payment-type:not(.hidden)`).addClass('hidden');
+            $(`#delivery-payment-${selectedValue}`).removeClass('hidden');
+        });
+
+        $('.payment-type > .pay-type > input').on('click', function(){
+            if($(this).val() == '{{ payment_types.CreditCard.value }}'){
+                $('#credit-card-payment-header').removeClass('hidden');
+                $('#last-step-number').html('4');
+            }else{
+                $('#credit-card-payment-header').addClass('hidden');
+                $('#last-step-number').html('3');
+            }
+        });
+    });
+</script>

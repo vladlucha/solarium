@@ -1,0 +1,15 @@
+<tr>
+    <td id="{{ category.pk }}" url="{% url 'update_category' category_pk=category.pk %}">
+        <a onClick="createItemModal('{% url 'edit_category' category_pk=category.pk %}', '{{ csrf_token }}')">
+            <span class="category-name">{{ category.name }}</span>
+        </a>
+    </td>
+    <td id="{{ category.pk }}" url="{% url 'update_category' category_pk=category.pk %}"><span
+            class="category-name">{{ category.description }}</span></td>
+    <td>{{ category.items.all|length }}</td>
+
+    <td class="text-center">
+        {#        <a onclick="openCategoryEditing('{{ category.pk }}');"><i class="glyphicon glyphicon-pencil action-button"></i></a>#}
+        <a onclick="deleteCategory('{{ category.pk }}')" class="btn btn-default"><i class="glyphicon glyphicon-trash action-button text-danger"></i> Удалить</a>
+    </td>
+</tr>

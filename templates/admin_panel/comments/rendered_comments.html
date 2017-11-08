@@ -1,0 +1,26 @@
+{% load staticfiles %}
+{% for comment in comments %}
+    <div class="material-shadow media" style="margin-bottom: 10px; padding: 5px">
+        <a class="pull-left" href="#">
+            <img style="object-fit: cover;" class="media-object" width="128" height="128" src="{% if comment.author.thumbnail.url == none %}{% static 'images/default.png' %}{% else %}{{ user.thumbnail.url }}{% endif %}" alt="">
+        </a>
+        <div class="media-body">
+            <h4 class="media-heading">{{ comment.author.username }}
+                <small>{{ comment.date_of_creation }}</small>
+                <a class="xsmall-text pull-right glyphicon glyphicon-pencil no-uderline" onclick="toggleCommentEdit($(this).closest('.media-body'), true)"></a>
+            </h4>
+            <span class="comment-container">{{ comment.body }}</span>
+
+            <span class="pull-right">
+                <a class="text-success glyphicon glyphicon-ok no-uderline" onclick="markAsModerated($(this).parent().parent().parent(), '{% url 'mark_as_moderated' pk=comment.pk %}')"></a><br>
+                <a class="text-danger glyphicon glyphicon-trash no-uderline" onclick="deleteComment($(this).parent().parent().parent(), '{% url 'delete_comment' pk=comment.pk %}')"></a>
+            </span>
+            <span class="comment-edit" style="display: none;">
+                <textarea class="" id="edited_comment_body" rows="3">{{ comment.body }}</textarea><br>
+                <a class="btn btn-success btn-xs" onclick="moderateComment($(this).parent().parent().parent(), '{% url 'moderate_comment' pk=comment.pk %}')">Сохранить</a>
+                <a class="btn btn-danger btn-xs" onclick="toggleCommentEdit($(this).closest('.media-body'), false)">Отменить</a>
+            </span>
+
+        </div>
+    </div>
+{% endfor %}

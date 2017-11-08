@@ -1,0 +1,24 @@
+<ul class="main-sidebar offcanvas-nav">
+    <li class="widget widget_layered_nav dropdown current-menu-ancestor {% if request.resolver_match.view_name == 'orders' %}active{% endif %}">
+        <a href="{% url 'orders' %}">
+            <h4 class="widget-title">Заказы</h4>
+        </a>
+    </li>
+    <li class="widget widget_layered_nav dropdown current-menu-ancestor {% if request.resolver_match.view_name == 'profile' %}active{% endif %}">
+        <a href="{% url 'profile' %}">
+            <h4 class="widget-title">Реквизиты оплаты</h4>
+        </a>
+    </li>
+    {% if not request.user.is_admin %}
+        <li class="widget widget_layered_nav dropdown current-menu-ancestor {% if request.resolver_match.view_name == 'messages' %}active{% endif %}">
+            <a href="{% url 'messages' %}">
+                <h4 class="widget-title">Сообщения</h4>
+            </a>
+        </li>
+    {% endif %}
+    <li class="widget widget_layered_nav dropdown current-menu-ancestor">
+        <a href="{% url 'logout' %}">
+            <h4 class="widget-title">Выход</h4>
+        </a>
+    </li>
+</ul>

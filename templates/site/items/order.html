@@ -1,0 +1,55 @@
+<div class="select-item media" data-order-uuid="{{ order.uuid }}" style="margin-bottom: 10px; padding: 0">
+    <div class="container-fluid col-8-grid" style="padding-right: 3px;">
+        <div class="row">
+            <div class="{% if request.resolver_match.view_name != 'orders' and not nonedit %}col-1-custom{% else %}col-xs-2{% endif %}">
+                <div class="basket-thumbnail">
+                    <div class="swiper-container gallery-top">
+                        <div class="swiper-wrapper">
+                            {% with index=0 %}
+                                <div class="swiper-slide open-gallery gallery-item" data-index="{{ index }}"
+                                     data-src="{{ order.item.thumbnail.url }}"
+                                     style="background-image:url({{ order.item.thumbnail.url }})"></div>
+                                {% for image in order.item.gallery.all %}
+                                    <div class="swiper-slide open-gallery gallery-item"
+                                         data-index="{{ index|add:forloop.counter }}"
+                                         data-src="{{ image.url }}" style="background-image:url({{ image.url }})"></div>
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
+                        <div class="swiper-button-next swiper-button-white"></div>
+                        <div class="swiper-button-prev swiper-button-white"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="order {% if request.resolver_match.view_name != 'orders' %}col-4-custom{% else %}col-xs-6{% endif %}">
+                <div class="order-name-wrapper">
+                    <h4><span class="order-name">{{ order.item.name }}</span></h4>
+                    <span>Размер:
+                        {{ order.items_sizes_count.size.name }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="{% if request.resolver_match.view_name != 'orders' and not nonedit %}col-1-custom{% else %}col-xs-2{% endif %} text-center orders-count-wrapper" data-max-count="{{ order.items_sizes_count.current_count }}" data-change-count-url="{% url 'change_count' order_uuid=order.uuid %}">
+                {% if request.resolver_match.view_name != 'orders' and not nonedit %}
+                    <i class="fa fa-caret-up manage-count increase {% if order.count >= order.items_sizes_count.current_count %}hidden{% endif %}" aria-hidden="true"></i>
+                {% endif %}<br>
+                    <span class="orders-count">{{ order.count }}</span> шт.<br>
+                {% if request.resolver_match.view_name != 'orders' and not nonedit %}
+                    <i class="fa fa-caret-down manage-count decrease {% if order.count == 1 %}hidden{% endif %}" aria-hidden="true"></i>
+                {% endif %}
+            </div>
+
+            <div class="price {% if request.resolver_match.view_name != 'orders' and not nonedit %}col-1-custom{% else %}col-xs-2{% endif %} text-center left-border order-price">
+                <span style="font-size: 17px;">{{ order.item.item_price|floatformat:2 }} руб.</span>
+            </div>
+            {% if request.resolver_match.view_name != 'orders' and not nonedit %}
+                <div class="price col-1-custom text-center left-border">
+                    <span onclick="deleteOrder($(this).parent(), '{% url 'delete_order' order_uuid=order.uuid %}')">
+                        <i class="glyphicon glyphicon-trash delete-order"></i>
+                    </span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

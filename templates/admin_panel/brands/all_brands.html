@@ -1,0 +1,33 @@
+{% include 'admin_panel/after_redirect_notifications.html' %}
+<br>
+<div class="row">
+    <div class="col-xs-6 text-left"><h3>Бренды</h3></div>
+    <div class="col-xs-6 text-right" style="padding-top: 20px"><a class="btn btn-md btn-primary" href="{% url 'create_brand' brand_id=None %}">Добавить бренд</a></div>
+</div>
+{% if request.session.view_type == 'list' and all_brands %}
+    <br>
+    <div class="row">
+        <div class="col-md-2  text-center">
+            <b>Миниатюра</b>
+        </div>
+        <div class="col-md-6">
+            <b>Название и описание</b>
+        </div>
+        <div class="col-md-2 text-center">
+            <b>Страна</b>
+        </div>
+        <div class="col-md-2 text-center">
+            <b>Статус</b>
+        </div>
+    </div>
+{% endif %}
+
+<div class="row">
+    {% for brand in all_brands %}
+        {% include 'admin_panel/brands/brand_item.html' %}
+    {% endfor %}
+</div>
+<br>
+{% include 'admin_panel/no_data_message.html' with data=all_brands message='Брендов еще нет' %}
+{% include 'admin_panel/pagination.html' with objects=all_brands route='brands' page=brand_page num_pages=number_brand_pages input_name='brand_page' %}
+<br><br><br><br>

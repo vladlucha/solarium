@@ -1,0 +1,51 @@
+{% load staticfiles %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="">E-mail шаблоны</h1>
+        </div>
+        <div class="col-md-4">
+            <div class="text-right">
+                <br>
+                <a class="btn btn-success" href="{% url 'add_email_template' %}"><i
+                        class="glyphicon glyphicon-plus"></i>
+                    Добавить темплейт</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            {% if templates %}
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th width="30">#</th>
+                        <th>Название</th>
+                        <th width="60"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for template in templates %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url 'edit_email_template' template_pk=template.pk %}">{{ template.name }}</a>
+                            </td>
+                            <td>
+                                <form method="POST" action="{% url 'delete_template' template_pk=template.pk %}">
+                                    <a class="btn btn-default" onclick="confirmation($(this).parent().submit())"><i
+                                            class=" text-danger fa fa-times" aria-hidden="true"></i></a>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            {% include 'admin_panel/no_data_message.html' with data=templates message='Темплейтов не найдено' %}
+        </div>
+    </div>
+
+</div>
+

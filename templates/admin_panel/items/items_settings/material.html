@@ -1,0 +1,28 @@
+<tr>
+    <script>
+        $(document).ready(function() {
+            $('#material-{{ material.pk }}').editable({
+                mode: 'inline',
+                ajaxOptions: {
+                    type: 'POST'
+                }
+            });
+        });
+    </script>
+    <td id="material-{{ material.pk }}-container" class="material-container">
+        <div class="row">
+            <div class="col-xs-11" style="word-break: break-all">
+                <a href="#" id="material-{{ material.pk }}" data-type="text" data-pk="{{ material.pk }}" data-name="name" data-params="{csrfmiddlewaretoken: '{{csrf_token}}' }" data-url="{% url 'update_material' %}" data-title="Enter material name..">{{ material.name }}</a>
+            </div>
+            <div class="col-xs-1">
+                <form action="{% url 'delete_material' %}" method="POST" hidden>
+                    {% csrf_token %}
+                    <input type="hidden" name="pk" value="{{ material.pk }}"/>
+                    <input type="hidden" name="size_page" value="{{ size_page }}"/>
+                    <input type="hidden" name="material_page" value="{{ material_page }}"/>
+                </form>
+                <a class="pull-right btn btn-default" onclick="$(this).parent().find('form').submit()"><i class=" text-danger fa fa-times" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </td>
+</tr>

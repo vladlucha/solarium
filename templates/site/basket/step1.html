@@ -1,0 +1,82 @@
+<div class="slide" data-anchor="slide1">
+    <div class="normal-scroll">
+        <div class="basket container">
+            <br>
+            <div class="basket container basket-title">
+                <div class=row>
+                    <h3 class="col-sm-12">Выбранные товары</h3>
+                </div>
+            </div>
+            <div class="row basket-items" style="border-bottom: 2px solid #f1f1f1;">
+                <div class="col-xs-12">
+                    {% for order in orders %}
+                        <div class='order_item' id="{{ forloop.counter }}" style="position: inherit; display: block;" data-order_uuid="{{ order.uuid }}">
+                            <span class="no-decorations">
+                                {% include 'site/items/order.html' %}
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row" style="border-bottom: 2px solid #f1f1f1;">
+                <br>
+                <h4><span style="text-transform: uppercase; font-size: 17px; font-weight: bold;">Проверить промо-код</span></h4>
+
+                <form method="POST" action="{% url 'check_promocode' %}">
+                    {% csrf_token %}
+                    <div class="">
+                        <div>
+                            <div class="form-group row required">
+                                <div class="col-xs-4">
+                                    <input type="text" name="promocode" placeholder="XXXXXX" value="{% if 'promocode' in request.session %}{{ request.session.promocode.code }}{% endif %}">
+                                </div>
+                                <div class="col-xs-2">
+                                    <span class="mailchimp-form">
+                                        <div class="mailchimp-form-content clearfix">
+                                            <button type="submit" class="btn mailchimp-submit" style="width: 55%; height: 51px;">
+                                                ОК
+                                            </button>
+                                        </div>
+                                    </span>
+                                </div>
+
+                                <div class="col-xs-6 text-right">
+                                    {% if 'promocode' in request.session and request.session.promocode.value %}
+                                        <h4><b>
+                                            <span style="text-decoration:line-through">
+                                                <span class="total-price">{{ total_price|floatformat:2 }}</span> руб.
+                                            </span> / <span class="discount-price">{{ discount_price|floatformat:2 }}</span> руб.</b></h4>
+                                        <span>скидка
+                                            <span class="total-discount">{{ total_discount|floatformat:2 }}</span> руб.
+                                        </span>
+                                    {% else %}
+                                        <h4><b><span class="total-price">{{ total_price|floatformat:2 }}</span> руб.</b></h4>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+                <br>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <span class="mailchimp-form">
+                        <div class="mailchimp-form-content clearfix">
+                            <br><br>
+                            <button onclick="moveSlide('slide2', true)"
+                                    class="btn mailchimp-submit checkout-proceed-btn" style="width: 30%; margin-top: 40px">
+                                Далее  <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                            </button>
+                            <br>
+                            <br>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<script>
+    $(window).ready(function () {
+        $('#inline-editor-{{ size_group.pk }}').editable({
+            mode: 'inline',
+            ajaxOptions: {
+                type: 'POST'
+            }
+        });
+    });
+</script>
+<div class="panel panel-default size-panel" id="size-group-{{ size_group.pk }}" action="{% url 'create_size_group' %}">
+    <div class="panel-heading">
+        <h4 class="panel-title text-left">
+            <span>
+                <a data-toggle="collapse" href="#collapse-{{ size_group.pk }}" class="size-group-name"><i
+                        class="glyphicon glyphicon-chevron-right"></i></a>
+                <a href="#" id="inline-editor-{{ size_group.pk }}" data-type="text" data-pk="{{ size_group.pk }}"
+                   data-name="name" data-params="{csrfmiddlewaretoken: '{{ csrf_token }}'}"
+                   data-url="{% url 'update_size_group' %}" data-title="Enter group name..">{{ size_group.name }}</a>
+
+                <form action="{% url 'delete_size_group' %}" method="POST" hidden>
+                    {% csrf_token %}
+                    <input type="hidden" name="pk" value="{{ size_group.pk }}"/>
+                    <input type="hidden" name="size_page" value="{{ size_page }}"/>
+                    <input type="hidden" name="material_page" value="{{ material_page }}"/>
+                </form>
+
+            </span>
+        </h4>
+        <a class="pull-right btn btn-default" onclick="$(this).parent().find('form').submit()"><i
+                class=" text-danger fa fa-times" aria-hidden="true"></i></a>
+    </div>
+    <div id="collapse-{{ size_group.pk }}" class="panel-collapse collapse">
+        <div class="row">
+            <div class="col-xs-12">
+                <div action="{% url 'create_size' size_group_id=size_group.pk %}" method="POST"
+                     id="create-new-size-{{ size_group.pk }}">
+                    <div class="input-group">
+                        <input type="text" class="" name="name" placeholder="Добавить размер...">
+                        <span class="input-group-btn">
+                            <a class="btn btn-primary"
+                               onclick="createSize('create-new-size-{{ size_group.pk }}', 'size-contatiner-{{ size_group.pk }}', '{{ csrf_token }}')"><i
+                                    class="fa fa-plus"></i></a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <ul class="list-group text-left" id="size-contatiner-{{ size_group.pk }}" style="margin-bottom: 0">
+                    {% for size in size_group.sizes.all %}
+                        {% include 'admin_panel/items/items_settings/size.html' %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

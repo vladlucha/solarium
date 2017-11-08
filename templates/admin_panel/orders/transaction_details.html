@@ -1,0 +1,130 @@
+{% load staticfiles %}
+<br>
+<a class="btn btn-small btn-default" href="{% url 'admin_orders' %}"><i class="fa fa-arrow-left" aria-hidden="true"></i>
+    Назад к списку</a>
+<br>
+
+<div class="row">
+    <div class="col-xs-8">
+        <h3><label>Заказ: </label> {{ transaction.transaction_code }}</h3>
+        <h5><label>Статус: </label> {{ transaction.transaction_status.translate }}</h5>
+        <h5><label>Дата создания: </label> {{ transaction.created_date }}</h5>
+        <h5><label>Покупатель: </label> {{ transaction.purchaser.username }}
+            ({{ transaction.transaction_details.purchaser_surname }} {{ transaction.transaction_details.purchaser_name }} {{ transaction.transaction_details.purchaser_patronymic }}, {{ transaction.transaction_details.purchaser_email }}
+            )</h5>
+        <h5><label>Адрес: </label> {{ transaction.transaction_details.address }},
+            д.{{ transaction.transaction_details.house }}
+            {% if transaction.transaction_details.housing_number %}, кор.
+                {{ transaction.transaction_details.housing_number }},{% endif %}
+            кв. {{ transaction.transaction_details.flat_number }},
+            индекс {{ transaction.transaction_details.post_index }}</h5>
+        <h5><label>Тип доставки: </label> {{ transaction.transaction_details.details_delivery_type.translate }}</h5>
+        <h5><label>Тип оплаты: </label> {{ transaction.transaction_details.details_payment_type.translate }}</h5>
+        {% if transaction.applied_promocode != none %}
+            <h5>
+                <label>Промокод: </label>
+                {{ transaction.applied_promocode.discount_name }} {{ transaction.applied_promocode.discount_rate }}% ({{ transaction.applied_promocode.discount_value }} руб.)
+            </h5>
+        {% endif %}
+        <h5><label>Полная стоимость: </label>
+            {{ transaction.total_price|floatformat:2 }} руб.
+            (товары {{ transaction.orders_sum_price|floatformat:2 }} руб. {% if transaction.delivery_additional_price > 0 %}+ доставка {{ transaction.delivery_additional_price|floatformat:2 }} руб.{% endif %} {% if transaction.transaction_discounts != none %}- скидка {{ transaction.total_discount_value }} руб.{% endif %})</h5>
+    </div>
+    <div class="col-xs-4">
+        <form method="POST" action="{% url 'modify_transaction' transaction_uuid=transaction.uuid %}">
+            <div class="row form-group">
+                <div class="col-xs-12">
+                    <label>Изменить статус</label>
+                    <select name="status" placeholder="Изменить статус" class="form-control">
+                        {% for status in statuses %}
+                            <option {% if status.value == transaction.status %}selected{% endif %}
+                                    value="{{ status.value }}">{{ status.translate }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-xs-12">
+                    <label>Добавить трек-код</label>
+                    <input type="text" placeholder="Трек-код" name="track_code"
+                           value="{{ transaction.transaction_details.track_code|get }}">
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-xs-12 text-center">
+                    <button type="submit" class="btn btn-lg btn-success">Сохранить изменения</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<br>
+<h3><label>Товары: </label></h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th width="30">#</th>
+        <th>Наименование</th>
+        <th>Бренд</th>
+        <th>Размер</th>
+        <th width="120">Кол-во</th>
+        <th width="220">Скидка</th>
+        <th width="120">Стоимость</th>
+        <th width="180">Полная стоимость</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for order in transaction.orders.all %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><a href="{% url 'get_transaction' transaction_uuid=transaction.uuid %}">{{ order.item.name }}</a></td>
+            <td>{{ order.item.brand.name }}</td>
+            <td>{{ order.items_sizes_count.size.name }}</td>
+            <td>{{ order.count }} шт.</td>
+            <td>
+                {% with discount=order.order_discount.first %}
+                    {% if discount %}
+                        {{ discount.discount_name }} {{ discount.discount_rate }}% (всего: {{ discount.discount_value }} руб.)
+                    {% else %}
+                         -
+                    {% endif %}
+                {% endwith %}
+            </td>
+            <td>{{ order.item.item_price|floatformat:2 }} руб.</td>
+            <td>{{ order.total_price|floatformat:2 }} руб.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<h3><label>История: </label></h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th width="30">#</th>
+        <th>Наименование</th>
+        <th>Бренд</th>
+        <th>Размер</th>
+        <th width="120">Кол-во</th>
+        <th width="120">Стоимость</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for order in transaction.orders.all %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><a href="{% url 'get_transaction' transaction_uuid=transaction.uuid %}">{{ order.item.name }}</a></td>
+            <td>{{ order.item.brand.name }}</td>
+            <td>{{ order.items_sizes_count.size.name }}</td>
+            <td>{{ order.count }} шт.</td>
+            <td>
+                {% if product.price == product.item_price %}{{ product.price }}  руб.{% endif %}
+                {% if product.price != product.item_price %}<span>{{ product.price }}  руб.</span>{{ product.item_price|floatformat:2 }} руб.{% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

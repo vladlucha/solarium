@@ -1,0 +1,100 @@
+{% load staticfiles %}
+<br>
+<a class="btn btn-small btn-default" href="{% url 'email_templates' %}"><i class="fa fa-arrow-left"
+                                                                           aria-hidden="true"></i>
+    Назад к списку</a>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Новый E-mail шаблон</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        {% if email_template %}
+            <form method="POST" action="{% url 'delete_template' template_pk=email_template.pk %}"
+                  id="delete-template"></form>
+        {% endif %}
+
+        <form id="email-template-form" method="POST" action="{% url 'add_email_template' %}">
+            {% csrf_token %}
+            <input type="hidden" name="pk" value="{{ email_template.pk }}">
+            <div class="form-group">
+                <label for="brand-description">Название:</label>
+                <input class="" name="name" placeholder="Название..." value="{{ email_template.name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="brand-description">Заголовок:</label>
+                <input class="" name="subject" placeholder="Заголовок..." value="{{ email_template.subject }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="brand-description">HTML разметка:</label>
+                <textarea id="summernote" name="body" required>{{ email_template.body }}</textarea>
+            </div>
+
+            <a class="btn btn-success" onclick="validateForm('email-template-form')">Сохранить</a>
+            {% if email_template %}
+                <a class="btn btn-danger" onclick="confirmation($('#delete-template').submit())">Удалить</a>
+            {% endif %}
+        </form>
+    </div>
+</div>
+<script src="{% static 'salarium/js/template_item_select.js' %}"></script>
+<script>
+    $(window).load(function () {
+        $('#summernote').trumbowyg({
+            autogrow: true,
+            btnsDef: {
+                add_image: {
+                    ico: "insertImage",
+                    fn: function () {
+                        openMediaLibraryModal();
+                    }
+                },
+            },
+            btns: [
+                ['viewHTML'],
+                ['formatting'],
+                'btnGrp-semantic',
+                ['superscript', 'subscript'],
+                ['link'],
+                ['add_image'],
+                ['template'],
+                'btnGrp-justify',
+                'btnGrp-lists',
+                ['horizontalRule'],
+                ['removeformat'],
+                ['image', 'preview', 'fullscreen']
+            ],
+            plugins: {
+                //templates: [{html: '<h3>URURURURUR</h3>', name: 'URURUR templ'},{html: '<h3>URURURURUR</h3>', name: '12 URURUR templ'}]
+                templates: [{% for item in items %}{html: '<div>{{ item.thumbnail.preview_html_tag|safe }}<br><b>{{ item.name }}</b></div>', name: '{{ item.name }}'},{% endfor %}]
+            }
+        });
+
+        let $dropdown = $('.trumbowyg-dropdown-template.trumbowyg-dropdown');
+
+        $dropdown.prepend( "<div id='search-item'><input type='text' placeholder='Имя товара...' class='form-control'></div>" );
+
+        $('#search-item > input').on('change keyup paste', function(){
+            let value = $(this).val().toLowerCase();
+            $dropdown.find('button').each(function(){
+                let name = $(this).html().toLowerCase();
+                if(name.indexOf(value) !== -1) {
+                    $(this).show();
+                }else{
+                    $(this).hide();
+                }
+            });
+        });
+
+        $('#search-item').on('mousedown', function(event){
+            // $dropdown.show();
+            event.stopPropagation();
+        });
+    });
+</script>
+

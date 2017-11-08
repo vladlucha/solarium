@@ -1,0 +1,169 @@
+{% load staticfiles %}
+<script src="{% static 'salarium/js/s' %}"></script>
+
+<style>
+    .swiper-container {
+        width: 100%;
+        height: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .swiper-slide {
+        background-size: cover;
+        background-position: center;
+    }
+    .gallery-top {
+        height: 80%;
+        width: 100%;
+    }
+    .gallery-top .swiper-slide {
+        min-height: 400px;
+    }
+    .gallery-thumbs {
+        height: 20%;
+        box-sizing: border-box;
+        padding: 10px 0;
+    }
+    .gallery-thumbs .swiper-slide {
+        min-height: 150px !important;
+        width: 20%;
+        height: 25%;
+        opacity: 0.4;
+    }
+    .gallery-thumbs .swiper-slide-active {
+        opacity: 1;
+    }
+
+</style>
+
+<div class="container">
+
+    <div>
+
+        <div>
+            <br><br>
+            <div class="row">
+                <ol class="breadcrumb material-shadow" style="background-color: white">
+                    <li><a href="{% url 'shop' %}">Магазин</a></li>
+{#                    <li><a href="{{ referrer_url }}">Назад</a></li>#}
+                    <li class="active">{{ item.name }}</li>
+                </ol>
+            </div>
+            <div class="row material-shadow">
+                <div class="col-xs-8" style="padding: 0">
+                    <div class="">
+                        <div class="swiper-container gallery-top">
+                            <div class="swiper-wrapper">
+                            {% with index=0 %}
+                                <div class="swiper-slide open-gallery gallery-item" data-index="{{ index }}" data-src="{{ item.thumbnail.url }}" style="background-image:url({{ item.thumbnail.url }})"></div>
+                                {% for image in item.gallery.all %}
+                                    <div class="swiper-slide open-gallery gallery-item" data-index="{{ index|add:forloop.counter }}" data-src="{{ image.url }}" style="background-image:url({{ image.url }})"></div>
+                                {% endfor %}
+                            {% endwith %}
+                            </div>
+                    <!-- Add Arrows -->
+                            <div class="swiper-button-next swiper-button-white"></div>
+                            <div class="swiper-button-prev swiper-button-white"></div>
+                        </div>
+                        <div class="swiper-container gallery-thumbs">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide" style="background-image:url({{ item.thumbnail.url }})"></div>
+                                {% for image in item.gallery.all %}
+                                    <div class="swiper-slide" style="background-image:url({{ image.url }})"></div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="caption-full">
+                        <h4 class="pull-right">{{ item.item_price|floatformat:2 }} BYN<br><span class="us-price pull-right text-muted">$ {{ item.item_us_price|floatformat:2 }}</span></h4>
+                        <h3>{{ item.name }}</h3>
+                        <br>
+                        {{ item.description }}
+                        <br/>
+                        <br/>
+                        <small>
+                            Состав: {% for material in item.materials.all %}{{ material.name }}, {% endfor %}<br>
+                            Страна производитель: {{ item.manufacturer_country }}<br>
+                            Страна бренда: {{ item.brand.country }}
+                        </small>
+                    </div>
+                    <hr>
+                    <div class="ratings">
+                        <form id="new-order" action="{% url 'create_order' %}">
+                            <p class="caption-full">
+                                {% if sizes %}
+                                    {% for item_count in sizes %}
+                                        {% if item_count.count > 0 %}
+                                            <input type="checkbox" name="{{ item_count.pk }}"><small>{{ item_count.size.name }}</small>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <small class="text-muted">Нет на складе</small>
+                                {% endif %}
+                            </p>
+                            {% if sizes %}
+                                <a onclick="createOrder('{{ csrf_token }}', $('#new-order'))" class="btn btn-default full-width"><i class="glyphicon glyphicon-shopping-cart"> Добавить в корзину</i></a>
+                            {% endif %}
+                            <input type="hidden" name="item-pk" value="{{ item.pk }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row" style="margin-right: -30px; margin-left: -30px">
+        <div class=col-xs-12><h3>Похожие товары</h3></div>
+
+        {% include 'UI_elements/rendered_items.html' with items=same_items %}
+    </div>
+
+
+</div>
+
+<script>
+    var galleryTop = new Swiper('.gallery-top', {
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        spaceBetween: 10,
+    });
+    var galleryThumbs = new Swiper('.gallery-thumbs', {
+        spaceBetween: 10,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        touchRatio: 0.2,
+        slideToClickedSlide: true
+    });
+    galleryTop.params.control = galleryThumbs;
+    galleryThumbs.params.control = galleryTop;
+
+    $('.open-gallery').on('click', function(){
+        var pswpElement = document.querySelectorAll('.pswp')[0];
+
+        var gallery_options = {
+            index: $(this).data('index')
+        };
+
+        var images = [];
+
+        $('.gallery-item').each(function(){
+            var tempImage1 = new Image();
+            tempImage1.src = $(this).data('src');
+            tempImage1.onload = function() {
+                var W  = tempImage1.width, H = tempImage1.height;
+                images.push({src: tempImage1.src, w: W, h: H});
+
+                if(images.length == $('.gallery-item').length) {
+                    console.log(gallery_options);
+                    var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, images, gallery_options);
+                    gallery.init();
+                }
+            };
+
+        });
+    });
+
+</script>

@@ -1,0 +1,9 @@
+{% if alert_message %}
+    <script>
+        $(window).ready(function () {
+            {% if alert_message %}
+                $.growl({ message: "{{ alert_message }}", style: "{{ alert_type }}", title: "{% if alert_type == 'notice' %}Отлично!{% else %}Ошибка{% endif %}"  });
+            {% endif %}
+        });
+    </script>
+{% endif %}

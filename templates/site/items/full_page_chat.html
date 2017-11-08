@@ -1,0 +1,21 @@
+
+<div class="chatbox__messages__container {% if forloop.counter > 1 %}hidden{% endif %}" id="user-messages-{{ user.pk }}">
+    <div class="chatbox__messages" id="chat-messages-{{ user.pk }}">
+        {% for message in user.messages %}
+            <div class="chatbox__messages__user-message {% if message.author.pk == request.user.pk %}self{% else %}other{% endif %}">
+                <div class="chatbox__messages__user-message--ind-message">
+                    <p class="name">{{ message.author.username }}</p>
+                    <br/>
+                    <p class="message">{{ message.message }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <form id="send-message-{{ user.pk }}">
+        <input type="text" class="message" placeholder="Введите сообщение...">
+    </form>
+</div>
+
+{% include 'admin_panel/no_data_message.html' with data=messages message='Сообщений еще нет' %}
+
+

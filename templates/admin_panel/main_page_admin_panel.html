@@ -1,0 +1,22 @@
+{% include 'admin_panel/admin_panel_menu.html' %}
+
+<main id="panel">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <a class="toggle-button btn-hamburger">
+                    <i class="glyphicon glyphicon-arrow-right"></i>
+                </a>
+
+            </div>
+        </div>
+    </div>
+    <div id="content-placeholder" class="container{% if full_width %}-fluid{% endif %}">
+        <div class="row">
+            <div class="col-xs-12">
+                {% include 'admin_panel/toggle_view.html' %}
+                {% include current_content_page %}
+            </div>
+        </div>
+    </div>
+</main>

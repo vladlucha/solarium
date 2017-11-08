@@ -1,0 +1,33 @@
+{% load staticfiles %}
+
+{% if transactions %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th width="30">#</th>
+            <th>Код</th>
+            <th>Покупатель</th>
+            <th>Адрес</th>
+            <th width="220">Тип доставки</th>
+            <th width="220">Дата создания</th>
+            <th width="120">Кол-во</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.pk }}</td>
+                <td><a href="{% url 'get_transaction' transaction_uuid=transaction.uuid %}">{{ transaction.transaction_code }}</a></td>
+                <td>{{ transaction.purchaser.username }}</td>
+                <td>{{ transaction.transaction_details.address }},
+                    д.{{ transaction.transaction_details.house }}
+                    {% if transaction.transaction_details.housing_number %}, кор. {{ transaction.transaction_details.housing_number }},{% endif %}
+                    кв. {{ transaction.transaction_details.flat_number }}, индекс {{ transaction.transaction_details.post_index }}</td>
+                <td>{{ transaction.transaction_details.details_delivery_type.translate }}</td>
+                <td>{{ transaction.created_date }}</td>
+                <td>{{ transaction|transaction_items_count }} ед.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

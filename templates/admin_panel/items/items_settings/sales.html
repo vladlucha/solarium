@@ -1,0 +1,22 @@
+
+<table class="table table-hover border">
+    <thead>
+    <tr>
+        <th class="text-center">Название</th>
+        <th class="text-center">Дата начала</th>
+        <th class="text-center">Дата окончания</th>
+        <th class="text-center">Размер скидки</th>
+        <th class="text-right"></th>
+    </tr>
+    </thead>
+    <tbody id="sales-container">
+    {% include 'admin_panel/items/items_settings/new_sale.html' %}
+    {% for sale in sales %}
+        {% include 'admin_panel/items/items_settings/sale.html' %}
+    {% endfor %}
+    </tbody>
+</table>
+<div class="col-xs-12">
+    {% include 'admin_panel/pagination.html' with objects=sales route='sales' page=sale_page num_pages=number_sale_pages input_name='sale_page' %}
+</div>
+{% include 'admin_panel/no_data_message.html' with data=sales message='Нет скидок' %}

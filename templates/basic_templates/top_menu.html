@@ -1,0 +1,129 @@
+{% load staticfiles %}
+{% load lazysignup_tags %}
+
+
+<header class="header-container header-type-classic header-navbar-classic header-scroll-resize">
+    <div class="navbar-container">
+        <div class="navbar navbar-default navbar-scroll-fixed">
+            <div class="navbar-default-wrap">
+                <div class="container">
+                    <div class="row">
+                        <div class="navbar-default-col">
+                            <div class="navbar-wrap">
+                                <div class="navbar-header">
+                                    <button type="button" class="navbar-toggle">
+                                        <span class="sr-only">Toggle navigation</span>
+                                        <span class="icon-bar bar-top"></span>
+                                        <span class="icon-bar bar-middle"></span>
+                                        <span class="icon-bar bar-bottom"></span>
+                                    </button>
+
+                                    <a class="navbar-brand" href="/">
+                                        <img class="logo" alt="SALARIUM" src="{% static 'salarium/img/logo.png' %}">
+                                        <img class="logo-fixed" alt="SALARIUM" src="{% static 'salarium/img/logo-fixed.png' %}">
+                                        <img class="logo-mobile" alt="SALARIUM" src="{% static 'salarium/img/logo-mobile.png' %}">
+                                    </a>
+                                </div>
+                                <nav class="collapse navbar-collapse primary-navbar-collapse">
+                                    <ul class="nav navbar-nav primary-nav">
+
+                                        <li class="menu-item-has-children ">
+                                            <a href="{% url 'shop' %}" class="dropdown-hover">
+                                                <span class="underline">Магазин</span>
+                                            </a>
+
+                                        </li>
+                                        <li class="menu-item-has-children">
+                                            <a href="{% url 'blog' %}" class="dropdown-hover">
+                                                <span class="underline">Блог</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item-has-children">
+                                            {% if user|is_lazy_user %}
+                                                <a data-toggle="modal" data-target="#login-modal" data-backdrop="static" class="dropdown-hover">
+                                                    <span class="underline">Вход</span>
+                                                </a>
+                                            {% else %}
+                                                <a href="{% url 'profile' %}" class="dropdown-hover">
+                                                    <span class="underline">Профиль</span>
+                                                </a>
+                                            {% endif %}
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                                <div class="header-right">
+                                    <a class="cart-icon-mobile" href="{% url 'basket' %}">
+                                        <img src="{% static 'salarium/img/basket.png' %}">
+                                    </a>
+                                    <div class="navbar-minicart navbar-minicart-topbar">
+                                        <div class="navbar-minicart">
+                                            <a class="minicart-link inline" href="{% url 'basket' %}">
+                                                <img src="{% static 'salarium/img/basket.png' %}">
+                                                <span class="badge {% if basket_items_count == 0 %}hidden{% endif %}" id="basket_items_count">{{ basket_items_count }}</span>
+                                            </a>
+                                            {% if not user|is_lazy_user and user.is_admin %}
+                                                <a class="minicart-link inline" href="{% url 'admin_panel' %}">
+                                                    <i class="fa fa-cogs" aria-hidden="true"></i>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="offcanvas open">
+    <div class="offcanvas-wrap">
+        <nav class="offcanvas-navbar">
+            <div class="offcanvas-user clearfix">
+                {% if user|is_lazy_user %}
+                    <a class="offcanvas-user-account-link" data-toggle="modal" data-target="#login-modal" data-backdrop="static">
+                        <i class="fa fa-user"></i> <span class="underline">Вход</span>
+                    </a>
+                {% else %}
+                    <a class="offcanvas-user-account-link" href="{% url 'profile' %}">
+                        <i class="fa fa-user"></i> <span class="underline">Профиль ({{ user.username }})</span>
+                    </a>
+                {% endif %}
+            </div>
+            <ul class="nav navbar-nav primary-nav">
+                <li class="menu-item-has-children megamenu megamenu-fullwidth dropdown">
+                    <a href="/" >
+                        <b class="underline">Главная</b>
+                    </a>
+                </li>
+                <li class="menu-item-has-children megamenu megamenu-fullwidth dropdown">
+                    <a href="{% url 'shop' %}" >
+                        <b class="underline">Магазин</b>
+                    </a>
+                </li>
+                <li class="menu-item-has-children dropdown">
+                    <a href="{% url 'blog' %}" >
+                        <b class="underline">Блог</b>
+                    </a>
+                </li>
+                <li class="menu-item-has-children dropdown">
+                    <a class="minicart-link inline" href="{% url 'basket' %}">
+                        <b class="underline">Корзина</b>
+                        <span class="badge {% if basket_items_count == 0 %}hidden{% endif %}" id="basket_items_count">{{ basket_items_count }}</span>
+                    </a>
+                </li>
+                <li class="menu-item-has-children dropdown">
+                    {% if not user|is_lazy_user and user.is_admin %}
+                        <a class="minicart-link inline" href="{% url 'admin_panel' %}">
+                            <b class="underline">Администрирование</b>
+                        </a>
+                    {% endif %}
+                </li>
+
+            </ul>
+        </nav>
+    </div>
+</div>

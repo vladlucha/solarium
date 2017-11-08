@@ -1,0 +1,66 @@
+{% load staticfiles %}
+{% load cloudinary %}
+
+<br>
+<ul class="breadcrumb">
+    <li><a href="#"><a href="{% url 'all_posts' %}"><span>Статьи</span></a></a></li>
+    <li class="active">{% if post %}{{ post.title }}{% else %}Новая статья{% endif %}</li>
+</ul>
+<div class="new-post">
+    <form action="{% url 'create_or_update_post' %}" method="POST" id="new-post-form">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-xs-4 col-md-3">
+                <a onclick="addPostThumbnail('new-post-thumbnail', 'new-post-thumbnail-container')">
+                    <img src="
+                            {% if post.thumbnail.url == none %}{% static 'images/default.png' %}{% else %}{{ post.thumbnail.url }}{% endif %}"
+                         id="new-post-thumbnail" class="new-post-thumbnail"/>
+                    {% if post %}
+                        <input type="hidden" name="pk" value="{{ post.pk }}">
+                    {% endif %}
+                    <br>
+                    <input type="hidden" name="thumbnail" id="new-post-thumbnail-container"
+                           value="{{ post.thumbnail.pk }}" required>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-9">
+                <label for="new-post-title">Заглавие:</label>
+                <input type="text" class="" name="title" id="new-post-title" placeholder="Заглавие статьи.."
+                       value="{{ post.title }}" required><br>
+                <label for="new-post-excerpt">Цитата:</label>
+                <textarea id="new-post-excerpt" name="excerpt" placeholder="Цитата статьи..." class=""
+                          rows="4">{{ post.excerpt }}</textarea>
+
+            </div>
+        </div>
+        <br>
+        <label for="post-status">Статья:</label>
+        <textarea id="summernote" name="body" required>{{ post.body }}</textarea>
+
+        <br>
+        <label for="post-status">Тэги:</label><br>
+        <input type="text" data-role="tagsinput" name="tags" class="" id="tags-input"
+               placeholder="Теги..." value="{% for tag in post.tags.all %} {{ tag.tag_text }}, {% endfor %}">
+
+        <br><br>
+        <label for="post-status">Статус:</label><br>
+        <select class="selectpicker" name="status" id="post-status">
+            {% for status in statuses %}
+                <option value="{{ status.value }}"{% if post and status.value == post.status %}selected{% endif %}>{{ status.translate }}</option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+    </form>
+    <form class="form-inline" method="post" {% if post %}action="{% url 'delete_post' post_id=post.pk %}"{% endif %}>
+        <a onclick="savePost()" class="btn btn-success" id="save-btn">Сохранить</a>
+            <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+</div>
+<br><br>
+
+
+<script src="{% static 'salarium/js/vendor/trumbowyg.emoji.min.js' %}"></script>
+<script src="{% static 'salarium/js/vendor/trumbowyg.noembed.min.js' %}"></script>
+<script src="{% static 'salarium/js/vendor/trumbowyg.template.min.js' %}"></script>
+<script src="{% static 'salarium/js/posts.js' %}"></script>

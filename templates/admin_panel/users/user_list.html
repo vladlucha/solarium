@@ -1,0 +1,43 @@
+<h3>Список пользователей</h3>
+
+<input id="livesearch" type="text" class="" placeholder="Поиск.."/>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Никнейм</th>
+            <th>E-mail</th>
+            <th class="text-center">Подписка на новости</th>
+            <th class="text-center">Активен</th>
+            <th class="text-center">Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td class="text-center">
+                <input type="checkbox"hidden id="user-{{ forloop.counter }}" class="user-email-delivery" {% if user.include_in_email_delivery %}checked{% endif %} url="{% url 'toggle_rss' user_pk=user.pk %}">
+                <label for="user-{{ forloop.counter }}"></label>
+            </td>
+            <td class="text-center user-status">
+                {% if user.is_active %}
+                    <i class="glyphicon glyphicon-ok text-success"></i>
+                {% else %}
+                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                {% endif %}
+            </td>
+            <td class="text-center">
+                <a onclick="change_availability($(this), '{% url 'change_availability' user_pk=user.pk %}');">
+                    <i class="fa {% if user.is_active %}fa-unlock-alt{% else %}fa-lock{% endif %} action-button fa-lg" aria-hidden="true"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% load staticfiles %}
+<script src="{% static 'salarium/js/user_list.js' %}"></script>

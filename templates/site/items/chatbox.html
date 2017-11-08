@@ -1,0 +1,34 @@
+{% load staticfiles %}
+{% admin_user as admin %}
+<div class="chat" data-user="{{ request.user.pk }}">
+  <div class="chat-title">
+    <h1>{{ admin.name }} {{ admin.surname }} ({{ admin.username }})
+    <i class="glyphicon glyphicon-chevron-down pull-right hover-pointer hide-chatbox"></i>
+    </h1>
+    <h2>{% if admin.is_online %}Online{% else %}Offline{% endif %}</h2>
+    <figure class="avatar">
+      <img src="{% if admin.thumbnail.url == none %}{% static 'images/default.png' %}{% else %}{{ admin.thumbnail.url }}{% endif %}" />
+    </figure>
+  </div>
+  <div class="messages">
+    <div class="messages-content">
+
+        {% for message in request.user.messages %}
+            <div class="message {% if message.author.pk != request.user.pk %}new{% else %}message-personal{% endif %}">
+                {% if message.author.pk != request.user.pk %}
+                    <figure class="avatar"><img src="{% if admin.thumbnail.url == none %}{% static 'images/default.png' %}{% else %}{{ admin.thumbnail.url }}{% endif %}"/></figure>
+                {% endif %}
+                {{ message.message }}
+{#                <div class="timestamp">{{ message.timestamp }}</div>#}
+            </div>
+        {% endfor %}
+
+    </div>
+  </div>
+  <div class="message-box">
+    <textarea type="text" class="message-input chat-input" placeholder="Введите сообщение..."></textarea>
+    <button type="submit" class="message-submit">Отправить</button>
+  </div>
+
+</div>
+<div class="bg"></div>

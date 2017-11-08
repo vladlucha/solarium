@@ -1,0 +1,22 @@
+{% load staticfiles %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="author">
+            <div class="container">
+                <div class="ava">
+                    <a onclick="uploadThumbnail()" id="item-thumbnail" data-save-thumbnail-url="{% url 'change_thumbnail' %}">
+                        <div class="img-circle" id="user-thumbnail" style="background: url('{% if user.thumbnail.url == none %}{% static 'images/default.png' %}{% else %}{{ user.thumbnail.url }}{% endif %}') no-repeat center; background-size:cover; height: 246px; width: 246px; margin-left:calc(50% - 123px);"></div>
+                        <input type="hidden" name="thumbnail" id="user-thumbnail-container"
+                               value="{{ user.thumbnail.pk }}">
+                    </a>
+                </div>
+                <div class="name">
+                    {{ user.username }}
+                </div>
+                <div class="name2">
+                    Автор
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

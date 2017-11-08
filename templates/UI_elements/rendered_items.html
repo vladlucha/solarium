@@ -1,0 +1,25 @@
+{% for item in items %}
+    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3">
+        <div class="item-card material-shadow">
+            <a href="{% url 'get_item' item_slug=item.slug %}">
+                <div class="item-thumbnail">
+                    <img class="img-responsive" src="{{ item.thumbnail.url }}">
+                </div>
+            </a>
+            <h4>
+                <a href="{% url 'get_item' item_slug=item.slug %}">{{ item.name }}</a>
+            </h4>
+            <div class="description">{{ item.description | safe }}</div>
+            <span class="bottom left">
+                <p>
+                    <small>R</small>{{ item.item_price|floatformat:2 }}
+                </p>
+            </span>
+            <span class="bottom right">
+                <p>
+                    <small><a href="#">{{ item.country }}</a>, <a href="#">{{ item.city }}</a></small>
+                </p>
+            </span>
+        </div>
+    </div>
+{% endfor %}

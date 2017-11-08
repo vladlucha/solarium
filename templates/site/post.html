@@ -1,0 +1,133 @@
+{% load staticfiles %}
+{% load lazysignup_tags %}
+
+
+<div id="wrapper" class="wide-wrap">
+    <div class="offcanvas-overlay"></div>
+
+
+    <div class="blogs">
+        <div class="container">
+            <div class="titleBlog">
+                <span style="text-transform: uppercase"><h1>{{ post.title }}</h1></span>
+                <p>{{ post.date_of_creation }}</p>
+            </div>
+            <div class="photoblog">
+                <div class="image-wrapper" style="background-image: url('{{ post.thumbnail.url }}') no-repeat center; background-size:cover;">
+                    <img src="{{ post.thumbnail.url }}">
+                </div>
+            </div>
+            <div class="text">
+                {{ post.excerpt }}
+            </div>
+        </div>
+        {{ post.formatted_body|safe }}
+    </div>
+    <div class="author">
+        <div class="container">
+            <div class="ava">
+                <div class="img-circle"
+                     style="background: url('{% if user.thumbnail.url == none %}{% static 'images/default.png' %}{% else %}{{ post.author.thumbnail.url }}{% endif %}') no-repeat center; background-size:cover; height: 246px; width: 246px; margin-left: calc(50% - 123px)"></div>
+            </div>
+            <div class="name">
+                {{ post.author.username }}
+            </div>
+            <div class="name2">
+                Автор
+            </div>
+        </div>
+    </div>
+    <div class="comments">
+        <div class="container">
+            <h5>Комментарии</h5>
+
+            <p>ОСТАВИТЬ КОММЕНТАРИЙ</p>
+            <form class="formCom mailchimp-form " action="{% url 'create_comment' %}" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    {% if user|is_lazy_user %}
+                        <div class=" inpt1 col-md-5 col-sm-12">
+                            <input type="text" name="name" placeholder="Имя*" required/>
+                            <input type="email" name="email" placeholder="Email*" required/>
+                            <button type="submit" class="btn" style="min-width: 100%; margin-top: 15px">Отправить
+                            </button>
+
+                        </div>
+                    {% endif %}
+                    <div class="{% if user|is_lazy_user %}col-md-7{% endif %} col-sm-12 area">
+                        <textarea placeholder="Текст*" name="comment_body" required></textarea>
+                    </div>
+                </div>
+                <input type="hidden" name="post_pk" value="{{ post.pk }}"/>
+                {% if not user|is_lazy_user %}
+                    <div class="half flex-container">
+                        <button type="submit" class="btn">Отправить</button>
+                    </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <div class="moder">
+            Весь контент проходит модерацию. Будьте вежливы!
+        </div>
+    </div>
+    <div class="container">
+        <ol class="comment-list">
+            {% for comment in post.comments.all %}
+                <li class="comment">
+                    <div class="comment-wrap">
+                        <div class="comment-img">
+                            <div class="img-circle"
+                                 style="background: url('{% if comment.author == none %}{% static 'images/default.png' %}{% else %}{{ comment.author.thumbnail.url }}{% endif %}') no-repeat center; background-size:cover; height: 112px; width: 112px; border: solid #979797 1px"></div>
+                            {#                                <img alt="" src="{{ comment.author.thumbnail.url }}" height="90" width="90"/>#}
+                        </div>
+                        <article class="comment-block">
+                            <header class="comment-header">
+                                    <span class="ispostauthor">{{ comment.name }}
+                                    </span>
+                                    <span class="pull-right hidden">
+                                        <a class="comment-reply" href="#">12<i class="fa fa-heart"
+                                                                               aria-hidden="true"></i></a>
+                                    </span>
+                                <div class="comment-meta">
+                                    <time datetime="{{ comment.date_of_creation }}">
+                                        {{ comment.date_of_creation }}
+                                    </time>
+                                </div>
+                            </header>
+                            <div class="comment-content">
+                                {{ comment.body }}
+                            </div>
+                            {% if comment.author == request.user %}
+                                <form class="comment-edit" style="display: none;" action="{% url 'create_comment' %}"
+                                      method="POST">
+                                    {% csrf_token %}
+                                    <textarea class="" name="comment_body" rows="3">{{ comment.body }}</textarea><br>
+                                    <input type="hidden" name="pk" value="{{ comment.pk }}">
+                                    <button type="submit" class="btn btn-success btn-xs">Сохранить</button>
+                                    <a class="btn btn-danger btn-xs"
+                                       onclick="toggleCommentEdit($(this).closest('.media-body'), false)">Отменить</a>
+                                </form>
+                            {% endif %}
+                        </article>
+                    </div>
+                </li>
+            {% endfor %}
+
+        </ol>
+    </div>
+    <div class="social">
+        <div class="container">
+            <div class="ip container">ИП Галицкий Владислав Иосифович. Гос. регистрация от 6.10.2014 Администрацией
+                Первомайского района г. Витебска<br> № 391668040ю Юр. Адрес: Г. ВИТЕБСК, УЛ. ЧКАЛОВА д.27-1 кв.59. Дата
+                регистрации в Торговом реестре Республики Беларусь:<br> 6.12.2014 Исполнительным комитетом г. Витебска.
+                Режим работы: 10.00-19.00 без выходных
+            </div>
+        </div>
+    </div>
+</div>
+<!--scripts-->
+<script>
+
+</script>

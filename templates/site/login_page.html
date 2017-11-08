@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% include 'basic_templates/top_menu.html' %}
+<div class="row">
+    <div class="col-xs-3">{{ request.user.username }}</div>
+    <div class="col-xs-6">
+        <ul class="nav nav-tabs">
+          <li role="presentation" class="{{ sign_in }}">
+              <a href="#sign_in" aria-controls="settings" role="tab" data-toggle="tab">Sign In</a>
+          </li>
+          <li role="presentation" class="{{ sign_up }}">
+              <a href="#sign_up" aria-controls="settings" role="tab" data-toggle="tab">Sign Up</a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in {{ sign_in }}" id="sign_in">
+                <br>
+                {% if error == None %}
+                <div class="well">Plase, write your e-mail and password</div>
+                {% else %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endif %}
+                <form action="{% url 'sign_in'%}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="col-xs-6">
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-envelope"></i>
+                          </span>
+                          <input type="text" name="email-address" value="{{ email }}" class="" aria-label="...">
+                        </div><!-- /input-group -->
+                      </div><!-- /.col-lg-6 -->
+                      <div class="col-xs-6">
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-lock"></i>
+                          </span>
+                          <input type="password" name="password" value="{{ password }}" class="" aria-label="...">
+                        </div><!-- /input-group -->
+                      </div><!-- /.col-lg-6 -->
+                    </div><!-- /.row -->
+                    <br>
+                    <input type="submit" value="Sign In" class="btn btn-success btn-md">
+                    <button class="btn btn-primary btn-md" onclick="">Forgot?</button>
+                </form>
+            </div>
+            <div role="tabpanel" class="tab-pane fade in {{ sign_up }}" id="sign_up">
+                <br>
+                {% if error == None %}
+                <div class="well">Plase, write your e-mail. Name and password will be generated automatically.</div>
+                {% else %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endif %}
+                <form action="{% url 'sign_up'%}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-envelope"></i>
+                          </span>
+                          <input type="text" class="" value="{{ email }}" name="email-address" aria-label="...">
+                        </div><!-- /input-group -->
+                          <br>
+                      </div><!-- /.col-lg-6 -->
+                    </div><!-- /.row -->
+                    <br>
+                    <input type="submit" value="Sign Up" class="btn btn-primary btn-md">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-3"></div>
+</div>
+</body>
+</html>

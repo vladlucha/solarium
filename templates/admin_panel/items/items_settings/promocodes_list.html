@@ -1,0 +1,32 @@
+<div>
+    <div class="col-xs-12 text-left material-shadow" style="background-color: white; padding: 5px;">
+        <h4>Промокоды</h4>
+
+        <form action="{% url 'create_promocode' %}" method="POST" id="create-promocode-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="" name="code" placeholder="Промокод..." id="new-material-name" required>
+            </div>
+            <div class="input-group">
+                <input type="number" min="1" max="100" class="" name="value" placeholder="Размер скидки..." required>
+                <span class="input-group-addon">%</span>
+            </div>
+            <br>
+            <div class="text-center">
+                <button onclick="validateForm('create-promocode-form')" class="btn btn-primary btn-lg" type="submit"><i
+                        class="fa fa-plus"></i> Добавить</button>
+            </div>
+        </form>
+        <br>
+        {% if promocodes %}
+            <table class="table table-hover materials-table">
+                <tbody id="materials-container">
+                {% for promocode in promocodes %}
+                    {% include 'admin_panel/items/items_settings/promocode.html' %}
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        {% include 'admin_panel/no_data_message.html' with data=promocodes message='Промокодов еще нет' %}
+    </div>
+</div>

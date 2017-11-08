@@ -1,0 +1,32 @@
+{% load cloudinary %}
+<div class="media-placeholder" single="{{ is_single }}">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        {% for album in albums %}
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" style="min-height: 20px;">
+                    <h3 class="panel-title">
+                        <a class="collapse-toggle" data-toggle="collapse" data-parent="#accordion" href="#album-{{ album.pk }}"><b>{{ album.title }}</b> ({{ album.photos.all|length }})</a>
+                    </h3>
+                </div>
+                <div id="album-{{ album.pk }}" class="panel-collapse collapse" data-album-pk="{{ album.pk }}">
+                    <div class="panel-body"></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <hr>
+
+    {% for image in images %}
+        <span class="image-thumbnail image-context-menu">
+            {{ image |safe }}
+            <span class="additional unselected"></span>
+        </span>
+    {% endfor %}
+</div>
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <br><br>
+        <a class="btn btn-default btn-lg" id="load-more">Еще</a>
+        <br><br>
+    </div>
+</div>

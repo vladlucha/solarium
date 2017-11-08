@@ -1,0 +1,45 @@
+{% load mathfilters %}
+<div class="row">
+    {% if objects and num_pages|length > 1 %}
+        <nav class="commerce-pagination">
+            <div class="paginate">
+                <div class="paginate_links">
+                    {% if page|sub:3 >= 1 %}
+                        <a class='page-numbers' href="{% url route page_number=1 %}">1</a>
+                    {% endif %}
+                    {% if page|sub:3 > 1 %}
+                        <span class='page-numbers'>...</span>
+                    {% endif %}
+                    {% for i in num_pages %}
+                        {% with i=i|slugify %}
+                            {% with delta=i|sub:page %}
+
+                                {% if delta|abs <= 2 %}
+                                    {% if i|slugify == page|slugify %}
+                                        <span class='page-numbers current'>{{ i }}</span>
+                                    {% else %}
+                                        <a class='page-numbers' href="{% url route page_number=i %}">{{ i }}</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endwith %}
+                        {% endwith %}
+                    {% endfor %}
+                    {% if page|add:3 < num_pages|length %}
+                        <span class='page-numbers'>...</span>
+                    {% endif %}
+                    {% if page|add:3 <= num_pages|length %}
+                        <a class='page-numbers'
+                           href="{% url route page_number=num_pages|length %}">{{ num_pages|length }}</a>
+                    {% endif %}
+
+
+                    {% if page < num_pages|length %}
+                        <a class="next page-numbers" href="{% url route page_number=page|add:"1" %}">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    {% endif %}
+</div>

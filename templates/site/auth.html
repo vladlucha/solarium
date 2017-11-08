@@ -1,0 +1,114 @@
+{% include 'basic_templates/header.html' %}
+{% load staticfiles %}
+{#  <--- AUTH PAGE --->  #}
+{#    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">#}
+    <link rel="stylesheet" href="{% static 'auth_page/css/form-elements.css' %}">
+    <link rel="stylesheet" href="{% static 'auth_page/css/style.css' %}">
+
+    <script src="{% static 'auth_page/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'auth_page/js/jquery.backstretch.min.js' %}"></script>
+    <script src="{% static 'auth_page/js/scripts.js' %}"></script>
+    <script src="{% static 'auth_page/js/placeholder.js' %}"></script>
+
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+
+{#  <--- AUTH PAGE --->  #}
+    <body>
+        <!-- Top content -->
+        <div class="top-content">
+        	
+            <div class="inner-bg">
+                <div class="container">
+                    
+                    <div class="row">
+                        <div class="col-sm-5">
+                        	
+                        	<div class="form-box">
+	                        	<div class="form-top">
+	                        		<div class="form-top-left">
+	                        			<h3>Войдите в личный кабинет</h3>
+	                            		<p>Введите email и пароль:</p>
+                                        <small style="color: lightcoral">{{ sign_in_error }}</small>
+	                        		</div>
+	                        		<div class="form-top-right">
+	                        			<i class="fa fa-lock"></i>
+	                        		</div>
+	                            </div>
+	                            <div class="form-bottom">
+				                    <form role="form" action="{% url 'sign_in'%}" method="post" class="login-form">
+                                        {% csrf_token %}
+				                    	<div class="form-group">
+				                        	<input type="text" name="email-address" value="{{ email }}" placeholder="Email..." class="form-username " id="form-username">
+				                        </div>
+				                        <div class="form-group">
+				                        	<input type="password" name="password" value="{{ password }}" placeholder="Пароль..." class="form-password " id="form-password">
+				                        </div>
+				                        <button type="submit" class="btn">Войти</button>
+				                    </form>
+			                    </div>
+		                    </div>
+	                        
+                        </div>
+                        
+                        <div class="col-sm-1 middle-border"></div>
+                        <div class="col-sm-1"></div>
+                        	
+                        <div class="col-sm-5">
+                        	
+                        	<div class="form-box">
+                        		<div class="form-top">
+	                        		<div class="form-top-left">
+	                        			<h3>Зарегистрируйтесь</h3>
+	                            		<p>Заполните поля нижк для регистрации:</p>
+                                        <small style="color: lightcoral">{{ sign_up_error }}</small>
+	                        		</div>
+	                        		<div class="form-top-right">
+	                        			<i class="fa fa-pencil"></i>
+	                        		</div>
+	                            </div>
+	                            <div class="form-bottom">
+				                    <form role="form" action="{% url 'sign_up'%}" method="post" class="registration-form">
+                                        {% csrf_token %}
+				                        <div class="form-group">
+				                        	<input type="text" value="{{ sign_up_email }}" name="email-address" placeholder="Email..." class="form-email " id="form-email">
+				                        </div>
+                                        <div class="form-group">
+				                        	<input type="password" value="{{ sign_up_password }}" name="password" placeholder="Пароль..." class="form-last-name " id="form-last-name">
+				                        </div>
+				                        <button type="submit" class="btn">Зарегистрироваться</button>
+				                    </form>
+			                    </div>
+                        	</div>
+                        	
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="social-login">
+	                        	<div class="social-login-buttons">
+		                        	<a class="btn btn-link-2" href="#">
+		                        		<i class="fa fa-facebook"></i> Facebook
+		                        	</a>
+		                        	<a class="btn btn-link-2" href="#">
+		                        		<i class="fa fa-twitter"></i> Twitter
+		                        	</a>
+                                    <a class="btn btn-link-2" href="#">
+		                        		<i class="fa fa-instagram"></i> Instagram
+		                        	</a>
+                                    <a class="btn btn-link-2" href="#">
+		                        		<i class="fa fa-vk"></i> VK
+		                        	</a>
+	                        	</div>
+	                        </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+
+    </body>
+
+</html>

@@ -1,0 +1,29 @@
+{% load staticfiles %}
+<form action="{% url 'update_category' category_pk=category.pk %}" method="POST" id="new-category-form-{{ category.pk }}">
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="col-xs-8">
+            <div class="form-group">
+                <label for="new-brand-name">Название:</label>
+                <input type="text" class="" name="name" id="new-item-name" placeholder="Заголовок.."
+                       value="{{ category.name }}" required><br>
+            </div>
+
+            <div class="form-group">
+                <label for="new-brand-name">Описание:</label>
+                <textarea class="" name="description" placeholder="Описание.."
+                          required>{{ category.description|get }}</textarea>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <label for="brand-thumbnail">Изображение:</label>
+            <a onclick="addPostThumbnail('new-item-thumbnail-{{ category.pk }}', 'new-item-thumbnail-container-{{ category.pk }}')" id="item-thumbnail">
+                <img src="{% if category.thumbnail %}{{ category.thumbnail.url }}{% else %}{% static 'images/default.png' %}{% endif %}"
+                     id="new-item-thumbnail-{{ category.pk }}" class="new-brand-thumbnail"/>
+                <input type="hidden" name="thumbnail" id="new-item-thumbnail-container-{{ category.pk }}" value="{{ category.thumbnail.pk }}" required>
+            </a>
+        </div>
+    </div>
+    <br>
+</form>
